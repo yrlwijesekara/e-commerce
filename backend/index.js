@@ -13,15 +13,33 @@ mongoose.connect(connectionString).then(()=>{
     console.error("MongoDB connection error:", error);
 });
 
+const studentSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    email: String
+});
 
+const Student = mongoose.model("Students", studentSchema);
 
 app.get("/",(req,res)=>{
     console.log("Received a GET request");
     res.json("Hello World");
 })
 app.post("/",(req,res)=>{
-    console.log(req.body);
-    res.json("Hello World from post");
+    console.log(req.body)
+    const student = new Student(
+        {
+            name: req.body.name,
+            age: req.body.age,
+            email: req.body.email
+        }
+    );
+    student.save().then(()=>{
+        res.json("Student added successfully");
+    }).catch((error)=>{
+        console.error("Error adding student:", error);
+        res.json("Internal server error");
+    });
 })
 
 app.listen(5000,()=>{

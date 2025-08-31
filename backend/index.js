@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import Student from './models/student.js';
 
 
 const app = express();
@@ -12,14 +13,6 @@ mongoose.connect(connectionString).then(()=>{
 }).catch((error)=>{
     console.error("MongoDB connection error:", error);
 });
-
-const studentSchema = new mongoose.Schema({
-    name: String,
-    age: Number,
-    email: String
-});
-
-const Student = mongoose.model("Students", studentSchema);
 
 app.get("/",(req,res)=>{
     console.log("Received a GET request");

@@ -15,9 +15,14 @@ mongoose.connect(connectionString).then(()=>{
 });
 
 app.get("/",(req,res)=>{
-    console.log("Received a GET request");
-    res.json("Hello World");
-})
+   
+    Student.find().then((students)=>{
+        res.json(students);
+    }).catch((error)=>{
+        console.error("Error fetching students:", error);
+        res.json("Internal server error");
+    });
+});
 app.post("/",(req,res)=>{
     console.log(req.body)
     const student = new Student(

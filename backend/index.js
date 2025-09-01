@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import Student from './models/student.js';
 import studentRouter from './routers/studentRouter.js';
+import userRouter from './routers/userRouter.js';
 
 
 const app = express();
@@ -16,6 +17,7 @@ mongoose.connect(connectionString).then(()=>{
 });
 
 app.use("/students", studentRouter);
+app.use("/users", userRouter);
 
 app.listen(5000,()=>{
     console.log("Server started at port 5000");

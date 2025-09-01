@@ -1,5 +1,7 @@
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 export function createUser(req, res) {
 
      const passwordHash = bcrypt.hashSync(req.body.password, 10);
@@ -42,15 +44,33 @@ export function loginUser(req, res) {
         if (user == null) {
             return res.status(404).json({ message: "User not found" });
         }
+        else{
+            const passwordValid = bcrypt.compareSync(password, user.password);
+            if(passwordValid){
+                const token = jwt.sign({
+                    email : user.email,
+                    firstname : user.firstname,
+                    lastname : user.lastname,
+                    role : user.role,
+                    isBlocked : user.isBlocked,
+                    isEmailVerified : user.isEmailVerified,
+                    image : user.image
 
-        const isPasswordValid = bcrypt.compareSync(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: "Invalid password" });
+                },
+                "secret"
+            )
+                res.json({
+                    message: "Login successful",
+                    token: token
+                })
+            }else{
+                res.status(401).json({
+                    message: "Invalid password"
+                });
+            }
         }
-
-        res.json({ message: "Login successful", user });
     }).catch((err) => {
-        res.status(500).json({ message: "Error logging in", error: err.message });
+        return res.status(500).json({ message: "Error logging in", error: err.message });
     });
 }
 

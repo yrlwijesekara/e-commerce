@@ -10,6 +10,10 @@ export function createUser(req, res) {
     email: req.body.email,
     phone: req.body.phone,
     password: passwordHash,
+    role: req.body.role, // <-- add this
+    isBlocked: req.body.isBlocked, // <-- add this
+    isEmailVerified: req.body.isEmailVerified, // <-- add this
+    image: req.body.image // <-- add this
   };
   const user = new User(userData);
 
@@ -70,7 +74,7 @@ export function loginUser(req, res) {
     });
 }
 
-export function isAdmin(req, res, next) {
+export function isAdmin(req, res) {
   if (req.user == null) {
     return false;
   }

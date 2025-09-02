@@ -1,8 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import Student from "./models/student.js";
-import studentRouter from "./routers/studentRouter.js";
+import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
 
@@ -39,8 +38,9 @@ mongoose
     console.error("MongoDB connection error:", error);
   });
 
-app.use("/students", studentRouter);
+
 app.use("/users", userRouter);
+app.use("/products", productRouter);
 
 app.listen(5000, () => {
   console.log("Server started at port 5000");

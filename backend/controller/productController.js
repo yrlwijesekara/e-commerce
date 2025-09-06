@@ -82,3 +82,28 @@ export async function deleteProduct(req, res) {
         });
     }
 }
+
+export async function updateProduct(req, res) {
+    if(!isAdmin(req)){
+        return res.status(403).json({
+            message: "Access denied",
+            error: "User is not an admin"
+        });
+    }
+    const data = req.body;
+    const productId = req.params.productId;
+    data.productId = productId;
+
+    try {
+        await Product.updateOne({ productId: productId }, data);
+        res.status(200).json({
+            message: "Product updated successfully"
+        });
+    } catch (error) {
+        console.error("Error updating product:", error);
+        return res.status(500).json({
+            message: "Error updating product",
+            error: "Internal Server Error"
+        });
+    }
+}

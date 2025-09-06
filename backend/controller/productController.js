@@ -50,3 +50,35 @@ export async function getProducts(req, res) {
         });
     }
 }
+
+export async function deleteProduct(req, res) {
+    if(!isAdmin(req)){
+        return res.status(403).json({
+            message: "Access denied",
+            error: "User is not an admin"
+        });
+    }
+
+    
+    try {
+        const productId = req.params.productId;
+        const result = await Product.deleteOne({ productId: productId });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({
+                message: "Product not found",
+                error: "No product found with this productId"
+            });
+        }
+        
+        res.status(200).json({
+            message: "Product deleted successfully"
+        });
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        return res.status(500).json({
+            message: "Error deleting product",
+            error: "Internal Server Error"
+        });
+    }
+}

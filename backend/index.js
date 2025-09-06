@@ -39,8 +39,8 @@ mongoose
   });
 
 
-app.use("/users", userRouter);
-app.use("/products", productRouter);
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 app.listen(5000, () => {
   console.log("Server started at port 5000");

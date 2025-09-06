@@ -107,3 +107,41 @@ export async function updateProduct(req, res) {
         });
     }
 }
+
+export async function getProductInfo(req, res) {
+  try {
+    if (isAdmin(req)) {
+      const productId = req.params.productId;
+      const product = await Product.findOne({ productId: productId });
+      if (product == null) {
+        return res.status(404).json({
+          message: "Product not found",
+          error: "No product found with this productId"
+        });
+      }
+      res.status(200).json({
+        message: "Product info retrieved successfully",
+        product: product
+      });
+    } else {
+      const productId = req.params.productId;
+      const product = await Product.findOne({ productId: productId, isAvailable: true });
+      if (product == null) {
+        return res.status(404).json({
+          message: "Product not found",
+          error: "No product found with this productId"
+        });
+      }
+      res.status(200).json({
+        message: "Product info retrieved successfully",
+        product: product
+      });
+    }
+  } catch (error) {
+    console.error("Error retrieving product info:", error);
+    return res.status(500).json({
+      message: "Error retrieving product info",
+      error: "Internal Server Error"
+    });
+  }
+}

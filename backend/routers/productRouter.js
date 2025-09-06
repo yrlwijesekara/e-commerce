@@ -1,4 +1,4 @@
-import { createProduct } from "../controller/productController.js";
+import { createProduct, getProductInfo } from "../controller/productController.js";
 import { getProducts } from "../controller/productController.js";
 import { deleteProduct } from "../controller/productController.js";
 import { updateProduct } from "../controller/productController.js";
@@ -10,4 +10,5 @@ router.post("/", createProduct);
 router.get("/", getProducts);              
 router.delete("/:productId", deleteProduct);
 router.put("/:productId", updateProduct);
+router.get("/:productId", getProductInfo);
 export default router;

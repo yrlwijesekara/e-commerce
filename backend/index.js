@@ -5,11 +5,16 @@ import productRouter from "./routers/productRouter.js";
 import userRouter from "./routers/userRouter.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use(cors());
+
+// Middleware to verify JWT and attach user info to req.user
 app.use((req, res, next) => {
   const value = req.header("Authorization");
   if (value != null) {

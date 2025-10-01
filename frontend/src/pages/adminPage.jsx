@@ -4,6 +4,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { PiUsersFill } from "react-icons/pi";
 import { FaBriefcase } from "react-icons/fa";
 import { IoBagHandleSharp } from "react-icons/io5";
+import ProductsAdmin from "./Admin/productsAdmin";
 
 export default function AdminPage() {
   return (
@@ -47,7 +48,7 @@ export default function AdminPage() {
       <div className="w-[calc(100%-400px)] h-full flex flex-col justify-start items-center pt-10">
         <Routes>
           <Route path="/" element={<h1>Admin Panel</h1>} />
-          <Route path="products" element={<h2>Product Management</h2>} />
+          <Route path="products" element={<ProductsAdmin />} />
           <Route path="users" element={<h4>User Management</h4>} />
 
           <Route path="settings" element={<h1>Settings</h1>} />

@@ -9,8 +9,8 @@ import ProductsAdmin from "./Admin/productsAdmin";
 export default function AdminPage() {
   return (
     <div className="w-full h-screen bg-amber-50 flex">
-      <div className="w-[400px] h-full flex flex-col  pt-10 border-r">
-        <span className=" text-red-500 flex justify-center items-center mb-6 text-3xl font-bold">
+      <div className="w-[400px] h-full flex flex-col  pt-10 border-r bg-zinc-500">
+        <span className=" text-blue-800 flex justify-center items-center mb-6 text-3xl font-bold">
           Admin Panel
         </span>
         <Link

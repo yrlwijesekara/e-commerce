@@ -5,6 +5,7 @@ import { PiUsersFill } from "react-icons/pi";
 import { FaBriefcase } from "react-icons/fa";
 import { IoBagHandleSharp } from "react-icons/io5";
 import ProductsAdmin from "./Admin/productsAdmin";
+import AddProduct from "./Admin/addproduct";
 
 export default function AdminPage() {
   return (
@@ -45,7 +46,7 @@ export default function AdminPage() {
           Orders
         </Link>
       </div>
-      <div className="w-[calc(100%-400px)] h-full flex flex-col justify-start items-center pt-10">
+      <div className="w-[calc(100%-400px)] h-full flex flex-col justify-start items-center">
         <Routes>
           <Route path="/" element={<h1>Admin Panel</h1>} />
           <Route path="products" element={<ProductsAdmin />} />
@@ -53,6 +54,7 @@ export default function AdminPage() {
 
           <Route path="settings" element={<h1>Settings</h1>} />
           <Route path="orders" element={<h3>Order Management</h3>} />
+          <Route path="add-product" element={<AddProduct />} />
         </Routes>
       </div>
     </div>

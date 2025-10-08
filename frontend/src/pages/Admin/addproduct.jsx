@@ -3,6 +3,7 @@ import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import MediaUpload from "../../utils/mediaupload";
 
 export default function AddProduct() {
     const [productId, setProductId] = useState("");
@@ -11,7 +12,8 @@ export default function AddProduct() {
     const [labelledPrice, setLabelledPrice] = useState("");
     const [price, setPrice] = useState("");
     const [description, setDescription] = useState("");
-    const [images, setImages] = useState("");
+    const [images, setImages] = useState([]);
+    const [uploading, setUploading] = useState(false);
     const [stock, setStock] = useState(0);
     const [isAvailable, setIsAvailable] = useState(true);
     const [category, setCategory] = useState("cosmetics");
@@ -20,43 +22,74 @@ export default function AddProduct() {
 
     async function addproduct(e) {
         e.preventDefault();
-        
-        const alternativeNamesinArray = alternativeNames.split(",").map(s => s.trim()).filter(Boolean);
-        const imageArray = images.split(",").map(s => s.trim()).filter(Boolean);
-        
-        const productData = {   
-            productId,
-            name: productName,
-            altname: alternativeNamesinArray,
-            labelledprice: Number(labelledPrice),
-            price: Number(price),
-            description,
-            image: imageArray,
-            stock: Number(stock),
-            isAvailable: isAvailable,
-            category: category
-        };
-        
-        const token = localStorage.getItem("token");
-        if (token === null) {
-            alert("Please login first");
-            window.location.href = "/login";
-            return;
-        }
-        
+        setUploading(true);
+
         try {
+            // Check if images are selected
+            if (!images || images.length === 0) {
+                toast.error("Please select at least one image");
+                setUploading(false);
+                return;
+            }
+            
+            toast.loading("Uploading images...");
+            
+            // Upload each image file and collect URLs
+            const promisesArray = [];
+            
+            for (let i = 0; i < images.length; i++) {
+                if (!images[i]) continue; // Skip null or undefined files
+                promisesArray.push(MediaUpload(images[i]));
+            }
+            
+            if (promisesArray.length === 0) {
+                toast.error("No valid images to upload");
+                setUploading(false);
+                return;
+            }
+            
+            const responses = await Promise.all(promisesArray);
+            toast.dismiss();
+            console.log("Uploaded image URLs:", responses);
+            
+            const alternativeNamesinArray = alternativeNames.split(",").map(s => s.trim()).filter(Boolean);
+            
+            const productData = {   
+                productId,
+                name: productName,
+                altname: alternativeNamesinArray,
+                labelledprice: Number(labelledPrice),
+                price: Number(price),
+                description,
+                image: responses, // Use the array of image URLs from uploads
+                stock: Number(stock),
+                isAvailable: isAvailable,
+                category: category
+            };
+        
+            const token = localStorage.getItem("token");
+            if (token === null) {
+                toast.error("Please login first");
+                navigate("/login");
+                return;
+            }
+            
             const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/products/", productData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
+            
             console.log("Product added successfully:", response.data);
             toast.success("Product added successfully!");
             navigate("/admin/products");
+            
         } catch (error) {
             console.error("There was an error!", error);
             toast.error("Error adding product: " + (error.response?.data?.message || error.message));
+        } finally {
+            setUploading(false);
         }
     }
     
@@ -95,9 +128,27 @@ export default function AddProduct() {
                 </div>
                 <div className="gap-2 flex flex-col ">   
                     <label className="font-semibold ">Images</label>
-                    <input value={images} onChange={(e) => {
-                        setImages(e.target.value);
-                    }} type="text" className="w-full border-1 p-2 rounded-lg " placeholder="Enter Images (comma separated)" />
+                    <input 
+                        type="file" 
+                        onChange={(e) => {
+                            if (e.target.files && e.target.files.length > 0) {
+                                console.log("Files selected:", e.target.files.length);
+                                const filesArray = Array.from(e.target.files);
+                                console.log("Files converted to array:", filesArray.length);
+                                setImages(filesArray);
+                                toast.success(`${filesArray.length} image(s) selected`);
+                            } else {
+                                console.log("No files selected");
+                                setImages([]);
+                            }
+                        }} 
+                        multiple 
+                        accept="image/*"
+                        className="w-full border-1 p-2 rounded-lg"
+                    />
+                    {images && images.length > 0 && (
+                        <p className="text-sm text-green-600 mt-1">{images.length} file(s) selected</p>
+                    )}
                 </div>
                 <div className="gap-2 flex flex-col">   
                     <label className="font-semibold ">Description</label>
@@ -132,9 +183,13 @@ export default function AddProduct() {
                     </select>
                 </div>
                 <div className="gap-2 flex flex-col p-2 mt-4">   
-                    <Link onClick={addproduct} className="w-full bg-blue-500 text-white p-2 rounded-lg text-center hover:bg-blue-600">
-                        Add Product
-                    </Link>
+                    <button 
+                        type="submit" 
+                        className="w-full bg-blue-500 text-white p-2 rounded-lg text-center hover:bg-blue-600"
+                        disabled={uploading}
+                    >
+                        {uploading ? "Uploading..." : "Add Product"}
+                    </button>
                 </div>
                   
                   <div className="flex flex-col absolute top-3 right-5">   

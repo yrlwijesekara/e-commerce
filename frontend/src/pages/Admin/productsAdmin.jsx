@@ -12,7 +12,7 @@ const sampleProducts = [
     labelledprice: 3500,
     price: 2990,
     description: "A richly pigmented matte lipstick with a smooth, long-lasting finish. Infused with vitamin E for added moisture.",
-    image: ["/images/lipstick1.jpg", "/images/lipstick1-alt.jpg"],
+    image: ["../public/loginbg.jpg","../public/loginbg.jpg"],
     stock: 25,
     isAvailable: true,
     category: "cosmetics"
@@ -20,7 +20,7 @@ const sampleProducts = [
   {
     productId: "COS002",
     name: "HydraGlow Foundation",
-    altname: ["Liquid Foundation", "Dewy Finish Foundation"],
+    altname: ["Liquid Foundation", "../public/loginbg.jpg"],
     labelledprice: 5800,
     price: 5200,
     description: "Lightweight, buildable foundation that gives a radiant, dewy glow while keeping your skin hydrated all day.",
@@ -132,10 +132,44 @@ const sampleProducts = [
 
 export default function ProductsAdmin() {
     return (
-        <div className="w-full h-full flex  items-center">
+        <div className="w-full h-full flex flex-col items-center p-5 overflow-y-auto">
+            <table className="table-auto border-collapse border border-slate-400 m-5">
+                <thead>
+                    <tr>
+                        <th className="border border-slate-300 px-4 py-2">Product ID</th>
+                        <th className="border border-slate-300 px-4 py-2">Name</th>
+                        <th className="border border-slate-300 px-4 py-2">Labelled Price</th>
+                        <th className="border border-slate-300 px-4 py-2">Price</th>
+                        <th className="border border-slate-300 px-4 py-2">Description</th>
+                        <th className="border border-slate-300 px-4 py-2">Stock</th>
+                        <th className="border border-slate-300 px-4 py-2">Category</th>
+                        <th className="border border-slate-300 px-4 py-2">Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {sampleProducts.map((product, index) => (
+                        <tr key={index}>
+                            <td className="border border-slate-300 px-4 py-2">{product.productId}</td>
+                            <td className="border border-slate-300 px-4 py-2">{product.name}</td>
+                            <td className="border border-slate-300 px-4 py-2">₹{product.labelledprice}</td>
+                            <td className="border border-slate-300 px-4 py-2">₹{product.price}</td>
+                            <td className="border border-slate-300 px-4 py-2">{product.description}</td>
+                            <td className="border border-slate-300 px-4 py-2">{product.stock}</td>
+                            <td className="border border-slate-300 px-4 py-2">{product.category}</td>
+                            <td className="border border-slate-300 px-4 py-2">
+                                {product.image && product.image.length > 0 ? (
+                                    <img src={product.image[0]} alt={product.name} className="w-20 h-20 object-cover" />
+                                ) : (
+                                    "No Image"
+                                )}
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
             <Link to="/admin/Add-Product" className="p-4 bg-red-500 text-white rounded-full hover:bg-red-600 mb-5 fixed bottom-5 right-5 shadow-2xl">
-                <FaPlus /> </Link>
-
+                <FaPlus />
+            </Link>
         </div>
     );
 }

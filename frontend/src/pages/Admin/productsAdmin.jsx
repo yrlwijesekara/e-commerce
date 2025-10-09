@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AddProduct from "./addproduct";
 
 
+import { useState } from "react";
 
 const sampleProducts = [
   {
@@ -131,6 +132,9 @@ const sampleProducts = [
 
 
 export default function ProductsAdmin() {
+  const [products, setProducts] = useState(sampleProducts);
+
+  
     return (
         <div className="w-full h-full flex flex-col items-center p-5 overflow-y-auto">
             <table className="table-auto border-collapse border border-slate-400 m-5">
@@ -147,7 +151,7 @@ export default function ProductsAdmin() {
                     </tr>
                 </thead>
                 <tbody>
-                    {sampleProducts.map((product, index) => (
+                    {products.map((product, index) => (
                         <tr key={index}>
                             <td className="border border-slate-300 px-4 py-2">{product.productId}</td>
                             <td className="border border-slate-300 px-4 py-2">{product.name}</td>

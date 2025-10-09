@@ -1,9 +1,11 @@
 import { FaPlus } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import AddProduct from "./addproduct";
-
-
-import { useState } from "react";
+import { use, useEffect, useState} from "react";
+import axios from "axios";
+import { FaTrashAlt } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const sampleProducts = [
   {
@@ -12,11 +14,12 @@ const sampleProducts = [
     altname: ["Velvet Lipstick", "Matte Finish Lip Color"],
     labelledprice: 3500,
     price: 2990,
-    description: "A richly pigmented matte lipstick with a smooth, long-lasting finish. Infused with vitamin E for added moisture.",
-    image: ["../public/loginbg.jpg","../public/loginbg.jpg"],
+    description:
+      "A richly pigmented matte lipstick with a smooth, long-lasting finish. Infused with vitamin E for added moisture.",
+    image: ["../public/loginbg.jpg", "../public/loginbg.jpg"],
     stock: 25,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS002",
@@ -24,11 +27,12 @@ const sampleProducts = [
     altname: ["Liquid Foundation", "../public/loginbg.jpg"],
     labelledprice: 5800,
     price: 5200,
-    description: "Lightweight, buildable foundation that gives a radiant, dewy glow while keeping your skin hydrated all day.",
+    description:
+      "Lightweight, buildable foundation that gives a radiant, dewy glow while keeping your skin hydrated all day.",
     image: ["/images/foundation1.jpg"],
     stock: 18,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS003",
@@ -36,11 +40,12 @@ const sampleProducts = [
     altname: ["Hydrating Face Mist", "Toner Spray"],
     labelledprice: 2200,
     price: 1990,
-    description: "A refreshing rose-infused mist that hydrates and revitalizes skin instantly. Perfect for a mid-day pick-me-up.",
+    description:
+      "A refreshing rose-infused mist that hydrates and revitalizes skin instantly. Perfect for a mid-day pick-me-up.",
     image: ["/images/facemist1.jpg"],
     stock: 40,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS004",
@@ -48,11 +53,12 @@ const sampleProducts = [
     altname: ["Pressed Powder", "Oil Control Powder"],
     labelledprice: 3200,
     price: 2900,
-    description: "Lightweight compact powder with oil-control formula for a natural matte finish. Ideal for everyday use.",
+    description:
+      "Lightweight compact powder with oil-control formula for a natural matte finish. Ideal for everyday use.",
     image: ["/images/powder1.jpg"],
     stock: 30,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS005",
@@ -60,11 +66,12 @@ const sampleProducts = [
     altname: ["Glow Serum", "Brightening Serum"],
     labelledprice: 6800,
     price: 6400,
-    description: "Concentrated Vitamin C serum that brightens dull skin, evens tone, and boosts natural glow.",
+    description:
+      "Concentrated Vitamin C serum that brightens dull skin, evens tone, and boosts natural glow.",
     image: ["/images/serum1.jpg"],
     stock: 15,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS006",
@@ -72,11 +79,12 @@ const sampleProducts = [
     altname: ["Moisturizing Gel", "After Sun Gel"],
     labelledprice: 2500,
     price: 2200,
-    description: "Multi-purpose aloe vera gel that calms and hydrates skin. Perfect for after-sun care or daily moisturizing.",
+    description:
+      "Multi-purpose aloe vera gel that calms and hydrates skin. Perfect for after-sun care or daily moisturizing.",
     image: ["/images/aloe1.jpg"],
     stock: 35,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS007",
@@ -84,11 +92,12 @@ const sampleProducts = [
     altname: ["Micellar Water", "Makeup Cleanser"],
     labelledprice: 2700,
     price: 2400,
-    description: "Gentle micellar cleanser that removes makeup and impurities without stripping moisture.",
+    description:
+      "Gentle micellar cleanser that removes makeup and impurities without stripping moisture.",
     image: ["/images/remover1.jpg"],
     stock: 20,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS008",
@@ -96,11 +105,12 @@ const sampleProducts = [
     altname: ["Eyeshadow Kit", "Eye Makeup Palette"],
     labelledprice: 7500,
     price: 6990,
-    description: "12-shade eyeshadow palette featuring both matte and shimmer finishes for any occasion.",
+    description:
+      "12-shade eyeshadow palette featuring both matte and shimmer finishes for any occasion.",
     image: ["/images/eyeshadow1.jpg"],
     stock: 10,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS009",
@@ -108,11 +118,12 @@ const sampleProducts = [
     altname: ["Glow Stick", "Shimmer Highlighter"],
     labelledprice: 3100,
     price: 2800,
-    description: "Cream-based highlighter that adds instant glow to cheeks, nose, and brow bones.",
+    description:
+      "Cream-based highlighter that adds instant glow to cheeks, nose, and brow bones.",
     image: ["/images/highlighter1.jpg"],
     stock: 22,
     isAvailable: true,
-    category: "cosmetics"
+    category: "cosmetics",
   },
   {
     productId: "COS010",
@@ -120,60 +131,153 @@ const sampleProducts = [
     altname: ["Floral Perfume", "Body Spray"],
     labelledprice: 5400,
     price: 4990,
-    description: "A light, floral fragrance inspired by cherry blossoms for a refreshing and elegant scent.",
+    description:
+      "A light, floral fragrance inspired by cherry blossoms for a refreshing and elegant scent.",
     image: ["/images/perfume1.jpg"],
     stock: 28,
     isAvailable: true,
-    category: "cosmetics"
-  }
+    category: "cosmetics",
+  },
 ];
-
-
-
 
 export default function ProductsAdmin() {
   const [products, setProducts] = useState(sampleProducts);
+  const [loading, setLoading] = useState(false);
+  const [initialized, setInitialized] = useState(false);
 
-  
-    return (
-        <div className="w-full h-full flex flex-col items-center p-5 overflow-y-auto">
-            <table className="table-auto border-collapse border border-slate-400 m-5">
-                <thead>
-                    <tr>
-                        <th className="border border-slate-300 px-4 py-2">Product ID</th>
-                        <th className="border border-slate-300 px-4 py-2">Name</th>
-                        <th className="border border-slate-300 px-4 py-2">Labelled Price</th>
-                        <th className="border border-slate-300 px-4 py-2">Price</th>
-                        <th className="border border-slate-300 px-4 py-2">Description</th>
-                        <th className="border border-slate-300 px-4 py-2">Stock</th>
-                        <th className="border border-slate-300 px-4 py-2">Category</th>
-                        <th className="border border-slate-300 px-4 py-2">Image</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map((product, index) => (
-                        <tr key={index}>
-                            <td className="border border-slate-300 px-4 py-2">{product.productId}</td>
-                            <td className="border border-slate-300 px-4 py-2">{product.name}</td>
-                            <td className="border border-slate-300 px-4 py-2">₹{product.labelledprice}</td>
-                            <td className="border border-slate-300 px-4 py-2">₹{product.price}</td>
-                            <td className="border border-slate-300 px-4 py-2">{product.description}</td>
-                            <td className="border border-slate-300 px-4 py-2">{product.stock}</td>
-                            <td className="border border-slate-300 px-4 py-2">{product.category}</td>
-                            <td className="border border-slate-300 px-4 py-2">
-                                {product.image && product.image.length > 0 ? (
-                                    <img src={product.image[0]} alt={product.name} className="w-20 h-20 object-cover" />
-                                ) : (
-                                    "No Image"
-                                )}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <Link to="/admin/Add-Product" className="p-4 bg-red-500 text-white rounded-full hover:bg-red-600 mb-5 fixed bottom-5 right-5 shadow-2xl">
-                <FaPlus />
-            </Link>
+  useEffect(() => {
+    if (initialized) return; // Skip if already initialized
+
+    setLoading(true);
+    setInitialized(true); // Mark as initialized to prevent multiple calls
+
+    axios
+      .get(import.meta.env.VITE_BACKEND_URL + "/api/products/")
+      .then((response) => {
+        if (response.data && Array.isArray(response.data.products)) {
+          setProducts(response.data.products);
+        }
+      })
+      .catch((error) => {
+        console.log("Error fetching products:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [initialized]);
+
+  const navigate = useNavigate();
+
+  return (
+    <div className="w-full h-full flex flex-col items-center p-5 overflow-y-auto ">
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-lg font-semibold">Loading products...</p>
         </div>
-    );
+      ) : (
+        <>
+          <table className="table-auto border-collapse border border-slate-400 m-5">
+            <thead>
+              <tr>
+                <th className="border border-slate-300 px-4 py-2">
+                  Product ID
+                </th>
+                <th className="border border-slate-300 px-4 py-2">Name</th>
+                <th className="border border-slate-300 px-4 py-2">
+                  Labelled Price
+                </th>
+                <th className="border border-slate-300 px-4 py-2">Price</th>
+                <th className="border border-slate-300 px-4 py-2">
+                  Description
+                </th>
+                <th className="border border-slate-300 px-4 py-2">Stock</th>
+                <th className="border border-slate-300 px-4 py-2">Category</th>
+                <th className="border border-slate-300 px-4 py-2">Image</th>
+                <th className="border border-slate-300 px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((product, index) => (
+                <tr key={index}>
+                  <td className="border border-slate-300 px-4 py-2">
+                    {product.productId}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2">
+                    {product.name}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2">
+                    ₹{product.labelledprice}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2">
+                    ₹{product.price}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2">
+                    {product.description}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2">
+                    {product.stock}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2">
+                    {product.category}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2">
+                    {product.image && product.image.length > 0 ? (
+                      <img
+                        src={product.image[0]}
+                        alt={product.name}
+                        className="w-20 h-20 object-cover"
+                      />
+                    ) : (
+                      "No Image"
+                    )}
+                  </td>
+                  <td className="border border-slate-300 px-4 py-2  ">
+                    <div className="flex items-center justify-center gap-2">
+                    <Link
+                      to={`/admin/edit-product/${product.productId}`}
+                      className="text-blue-300 hover:text-blue-500"
+                    >
+                        <FaEdit className="inline-block mr-1" />
+                    </Link>
+                
+                 <Link
+                   
+                    className="text-red-300 hover:text-red-500"
+                 >
+                    <FaTrashAlt className="inline-block mr-1" onClick={
+            (e) => {
+              e.preventDefault();
+              const token = localStorage.getItem("token");
+              if (!token) {
+                toast.error("No token found. Please log in.");
+                navigate("/login");
+                return;
+              }
+              axios.delete(import.meta.env.VITE_BACKEND_URL + `/api/products/${product.productId}`, { headers: { Authorization: `Bearer ${token}` } })
+                .then((response) => {
+                  toast.success("Product deleted successfully");
+                  setProducts((prevProducts) => prevProducts.filter((p) => p.productId !== product.productId));
+                })
+                .catch((error) => {
+                  toast.error("Failed to delete product");
+                });
+            }
+                    } />
+                 </Link>
+                 </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          </table>
+        </>
+      )}
+      <Link
+        to="/admin/Add-Product"
+        className="p-4 bg-red-500 text-white rounded-full hover:bg-red-600 mb-5 fixed bottom-5 right-5 shadow-2xl"
+      >
+        <FaPlus />
+      </Link>
+    </div>
+  );
 }

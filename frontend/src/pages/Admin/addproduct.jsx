@@ -31,29 +31,36 @@ export default function AddProduct() {
                 setUploading(false);
                 return;
             }
-            
+
+            // Validate description length
+            if (!description || description.length < 20) {
+                toast.error("Description must be at least 20 characters");
+                setUploading(false);
+                return;
+            }
+
             toast.loading("Uploading images...");
-            
+
             // Upload each image file and collect URLs
             const promisesArray = [];
-            
+
             for (let i = 0; i < images.length; i++) {
                 if (!images[i]) continue; // Skip null or undefined files
                 promisesArray.push(MediaUpload(images[i]));
             }
-            
+
             if (promisesArray.length === 0) {
                 toast.error("No valid images to upload");
                 setUploading(false);
                 return;
             }
-            
+
             const responses = await Promise.all(promisesArray);
             toast.dismiss();
             console.log("Uploaded image URLs:", responses);
-            
+
             const alternativeNamesinArray = alternativeNames.split(",").map(s => s.trim()).filter(Boolean);
-            
+
             const productData = {   
                 productId,
                 name: productName,
@@ -66,25 +73,25 @@ export default function AddProduct() {
                 isAvailable: isAvailable,
                 category: category
             };
-        
+
             const token = localStorage.getItem("token");
             if (token === null) {
                 toast.error("Please login first");
                 navigate("/login");
                 return;
             }
-            
+
             const response = await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/products/", productData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             console.log("Product added successfully:", response.data);
             toast.success("Product added successfully!");
             navigate("/admin/products");
-            
+
         } catch (error) {
             console.error("There was an error!", error);
             toast.error("Error adding product: " + (error.response?.data?.message || error.message));

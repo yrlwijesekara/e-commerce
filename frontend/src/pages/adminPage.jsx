@@ -6,6 +6,7 @@ import { FaBriefcase } from "react-icons/fa";
 import { IoBagHandleSharp } from "react-icons/io5";
 import ProductsAdmin from "./Admin/productsAdmin";
 import AddProduct from "./Admin/addproduct";
+import Updateproduct from "./Admin/updateproduct";
 
 export default function AdminPage() {
   return (
@@ -55,6 +56,8 @@ export default function AdminPage() {
           <Route path="settings" element={<h1>Settings</h1>} />
           <Route path="orders" element={<h3>Order Management</h3>} />
           <Route path="add-product" element={<AddProduct />} />
+          <Route path="update-product" element={<Updateproduct />} />
+
         </Routes>
       </div>
     </div>

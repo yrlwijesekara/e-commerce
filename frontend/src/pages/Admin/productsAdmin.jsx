@@ -6,6 +6,7 @@ import axios from "axios";
 import { FaTrashAlt } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import toast from "react-hot-toast";
+import Loader from "../../components/loader";
 
 
 
@@ -38,14 +39,13 @@ export default function ProductsAdmin() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full h-full flex flex-col items-center p-5 overflow-y-auto ">
+    <div className="w-full h-full flex flex-col items-center p-8 overflow-y-auto ">
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <p className="text-lg font-semibold">Loading products...</p>
-        </div>
+        <Loader/>
       ) : (
         <>
-          <table className="w-full border-collapse border border-slate-400 m-6">
+        
+          <table className="w-full border-collapse border border-slate-400 ">
             <thead>
               <tr>
                 <th className="border border-slate-300 px-4 py-2">

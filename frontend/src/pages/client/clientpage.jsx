@@ -6,7 +6,7 @@ export default function ClientPage() {
     return (
         <div className="w-full h-screen mx-h-screen  ">
             <Header />
-            <div className="w-full h-[calc(100%-100px)] flex justify-center items-center">
+            <div className="w-full h-[calc(100%-100px)] ">
                 <Routes>
                     <Route path="/home" element={<h1>Client Home Page</h1>} />
                     <Route path="/products" element={<Product />} />

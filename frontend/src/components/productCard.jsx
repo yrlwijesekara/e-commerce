@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
+
 export default function ProductCard(props) {
     const product = props.product;
     return (
-        <div className="rounded-2xl shadow-md w-[300px] h-[400px] shrink-0 hover:shadow-lg transition-shadow duration-300 overflow-hidden relative">
+        <Link to={`/overview/${product.productId}`} className="rounded-2xl shadow-md w-[300px] h-[400px] shrink-0 hover:shadow-lg transition-shadow duration-300 overflow-hidden relative">
             {product.image && (
                 <img src={product.image[0]} alt={product.name} className="w-full h-[250px] object-cover animate-[ping_2s_reverse]" />
             )}
@@ -28,6 +30,6 @@ export default function ProductCard(props) {
                 <p className="text-gray-600">Category: {product.category}</p>
             </div>
 
-        </div>
+        </Link>
     );
 }

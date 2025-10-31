@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema(
             image : { type: String, required: true },
         }
        ],
-       notes : { type: String, required: "No additional notes" },
+       notes : { type: String, default: "No additional notes" },
     },
     { timestamps: true }
 );

@@ -40,6 +40,20 @@ export default function ProductOverviewPage() {
                         <span className="text-lg text-gray-600">{product.altname.join(", ")}</span>
                     </h1>
                     <p className="text-xl text-gray-600">{product.description}</p>  
+                    <div className="flex flex-row gap-4 mt-4">
+                          {
+                        product.labelledprice > product.price ? (
+                            <p>
+                                <span className="line-through mr-2 text-black-500">Rs. {product.labelledprice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                                <span className="text-red-600 font-semibold">Rs. {product.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                            </p>
+                        ) : (
+                            <p>
+                                <span>Rs. {product.price.toFixed(2)}</span>
+                            </p>
+                        )
+                    }
+                    </div>
                 </div>
             </div>}
             {status === 'error' && <div className="text-red-500 flex justify-center">Error loading product.</div>}

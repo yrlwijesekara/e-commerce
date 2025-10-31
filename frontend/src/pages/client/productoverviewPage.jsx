@@ -31,12 +31,14 @@ export default function ProductOverviewPage() {
     return (
         <div className="w-full h-screen ">
             {status === 'loading' && <Loader />} 
-            {status === 'success' && <div className="w-full h-full p-8 flex flex-row">
-                <div className="w-[49%] h-full bg-blue-100">
+            {status === 'success' && <div className="w-full h-full flex flex-row">
+                <div className="w-[49%] h-full flex justify-center items-center">
                     <ImageSlider images={product.image} />
                 </div>
-                <div className="w-[49%] h-full bg-red-300 flex flex-col p-4">
-                    <h1 className="text-3xl font-bold">{product.name}</h1>
+                <div className="w-[49%] h-full flex flex-col items-center pt-8">
+                    <h1 className="text-3xl font-bold">{product.name}
+                        <span className="text-lg text-gray-600">{product.altname.join(", ")}</span>
+                    </h1>
                     <p className="text-xl text-gray-600">{product.description}</p>  
                 </div>
             </div>}

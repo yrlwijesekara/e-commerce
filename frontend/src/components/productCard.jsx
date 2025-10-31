@@ -8,9 +8,9 @@ export default function ProductCard(props) {
                 <img src={product.image[0]} alt={product.name} className="w-full h-[250px] object-cover animate-[ping_2s_reverse]" />
             )}
 
-            <div className="p-4 bg-yellow-200">
+            <div className="p-4">
                 <h2 className="text-lg font-bold mb-2 text-center">{product.name}</h2>
-                <p className="text-gray-600">{product.description}</p>
+                
                 <div>
                     {
                         product.labelledprice > product.price ? (

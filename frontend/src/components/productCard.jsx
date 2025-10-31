@@ -26,9 +26,10 @@ export default function ProductCard(props) {
                     }
                 </div>
                
-                <p className="text-gray-600">Stock: {product.stock}</p>
+               
                 <p className="text-gray-600">Category: {product.category}</p>
             </div>
+           
 
         </Link>
     );

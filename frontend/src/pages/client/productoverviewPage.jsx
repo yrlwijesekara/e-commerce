@@ -35,7 +35,7 @@ export default function ProductOverviewPage() {
                 <div className="w-[49%] h-full flex justify-center items-center">
                     <ImageSlider images={product.image} />
                 </div>
-                <div className="w-[49%] h-full flex flex-col items-center pt-8">
+                <div className="w-[49%] h-full flex flex-col items-center pt-8 gap-3">
                     <h1 className="text-3xl font-bold">{product.name}
                         <span className="text-lg text-gray-600">{product.altname.join(", ")}</span>
                     </h1>
@@ -54,9 +54,18 @@ export default function ProductOverviewPage() {
                         )
                     }
                     </div>
+                     <div className="mt-2 p-4 w-full">
+                <button className="w-full bg-blue-500 border-2 text-white py-2 rounded hover:bg-white hover:text-blue-600 transition-colors duration-300 cursor-pointer">
+                    Add to cart 
+                </button>
+                <button className="w-full mt-2 bg-green-500 border-2 text-white py-2 rounded hover:bg-white hover:text-green-600 transition-colors duration-300 cursor-pointer">
+                    Buy Now
+                </button>
+            </div>
                 </div>
             </div>}
             {status === 'error' && <div className="text-red-500 flex justify-center">Error loading product.</div>}
         </div>
+        
     );
 }

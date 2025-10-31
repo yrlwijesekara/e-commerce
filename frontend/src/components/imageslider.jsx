@@ -18,7 +18,7 @@ export default function ImageSlider(props) {
                     <img
                         key={index}
                         src={image}
-                        className={`w-20 h-20 object-cover rounded cursor-pointer ${index === activeIndex ? 'border-2 border-blue-500' : 'border border-gray-300'}`}
+                        className={`w-20 h-20 object-cover rounded cursor-pointer ${index === activeIndex ? 'border-2 border-blue-500' : 'border border-gray-300'} hover:opacity-50 transform transition-transform duration-200`}
                         onClick={() => setActiveIndex(index)}
                     />
                 ))}

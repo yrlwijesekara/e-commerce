@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import Loader from "../../components/loader";
 import ImageSlider from "../../components/imageslider";
+import { addToCart, getCart } from "../../utils/cart";
 export default function ProductOverviewPage() {
     const params = useParams();
     const [product, setProduct] = useState(null);
@@ -55,7 +56,14 @@ export default function ProductOverviewPage() {
                     }
                     </div>
                      <div className="mt-2 p-4 w-full">
-                <button className="w-full bg-blue-500 border-2 text-white py-2 rounded hover:bg-white hover:text-blue-600 transition-colors duration-300 cursor-pointer">
+                <button 
+                    className="w-full bg-blue-500 border-2 text-white py-2 rounded hover:bg-white hover:text-blue-600 transition-colors duration-300 cursor-pointer"
+                    onClick={() => {
+                        addToCart(product,1);
+                        toast.success("Product added to cart");
+                        console.log(getCart());
+                    }}
+                >
                     Add to cart 
                 </button>
                 <button className="w-full mt-2 bg-green-500 border-2 text-white py-2 rounded hover:bg-white hover:text-green-600 transition-colors duration-300 cursor-pointer">

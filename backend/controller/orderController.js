@@ -1,5 +1,6 @@
 import Order from "../models/order.js";
 import Product from "../models/product.js";
+import { isAdmin } from "./userController.js";
 
 export async function createOrder(req, res) {
   if (!req.user) {
@@ -77,6 +78,37 @@ export async function createOrder(req, res) {
     console.error("Error creating order:", error);
     return res.status(500).json({
       message: "Error creating order",
+      error: "Internal Server Error",
+    });
+  }
+}
+
+export async function getOrders(req, res) {
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Please log in to view orders",
+      error: "User not authenticated",
+    });
+  }
+  
+  try {
+    if (isAdmin(req)) {
+      const orders = await Order.find().sort({ createdAt: -1 });
+      res.status(200).json({
+        message: "Orders retrieved successfully",
+        orders: orders,
+      });
+    } else {
+      const orders = await Order.find({ email: req.user.email });
+      res.status(200).json({
+        message: "Orders retrieved successfully",
+        orders: orders,
+      });
+    }
+  } catch (error) {
+    console.error("Error retrieving orders:", error);
+    return res.status(500).json({
+      message: "Error retrieving orders",
       error: "Internal Server Error",
     });
   }

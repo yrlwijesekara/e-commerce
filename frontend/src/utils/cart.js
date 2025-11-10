@@ -1,3 +1,8 @@
+export function removeFromCart(productId) {
+    const cartItems = getCart();
+    const newCart = cartItems.filter(item => item.productId !== productId);
+    localStorage.setItem('cart', JSON.stringify(newCart));
+}
 export function getCart(){
     let cart = localStorage.getItem('cart');
     
@@ -15,7 +20,8 @@ export function addToCart(product, quantity){
     if (existingItemIndex !== -1) {
         const newQuantity = cartItems[existingItemIndex].quantity + quantity;
         if (newQuantity <= 0) {
-            const newcart = cartItems.filter((item, index) => index !== existingItemIndex);
+            // Remove the item from cart
+            cartItems.splice(existingItemIndex, 1);
         } else {
             cartItems[existingItemIndex].quantity = newQuantity;
         }

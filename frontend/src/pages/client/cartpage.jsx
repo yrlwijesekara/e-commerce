@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getCart } from "../../utils/cart";
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -18,7 +19,7 @@ export default function CartPage() {
           return (
             <div
               key={item.productId || index}
-              className="w-[900px] h-[100px] mb-4 rounded overflow-hidden text-black flex flex-row items-center p-4 shadow-md gap-8 relative"
+              className="w-[900px] h-[100px] mb-4 rounded  text-black flex flex-row items-center p-4 shadow-md gap-8 relative"
             >
               <img
                 src={item.image}
@@ -31,14 +32,14 @@ export default function CartPage() {
                 
               </div>
               <div className="w-[200px] flex flex-row justify-center items-center">
-                <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-100 transition"> + </button>
+                <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-100 transition cursor-pointer"> + </button>
                 <p className="font-semibold p-2">Quantity: {item.quantity}</p>
                 <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-200 transition cursor-pointer"> - </button>
               </div>
               <div className="w-[200px] flex flex-col justify-center items-center">
                 <p className="font-semibold">Price: Rs. {item.price * item.quantity}</p>
               </div>
-              
+              <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:text-red-400 transition cursor-pointer absolute right-[-40px]"> <FaTrashAlt /> </button>
             </div>
           );
         })

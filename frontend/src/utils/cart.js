@@ -26,14 +26,31 @@ export function addToCart(product, quantity){
             cartItems[existingItemIndex].quantity = newQuantity;
         }
     } else {
+        // Always store a string for image (first image if array, or fallback)
+        let imageUrl = '';
+        if (Array.isArray(product.image)) {
+            imageUrl = product.image[0] || 'https://via.placeholder.com/100x100?text=No+Image';
+        } else if (typeof product.image === 'string' && product.image.length > 0) {
+            imageUrl = product.image;
+        } else {
+            imageUrl = 'https://via.placeholder.com/100x100?text=No+Image';
+        }
         cartItems.push({ 
             productId: product.productId, 
             quantity: quantity,
             name: product.name,
             altname: product.altname,
             price: product.price,
-            image: product.image
+            image: imageUrl
          });
     }
     localStorage.setItem('cart', JSON.stringify(cartItems));
+}
+
+export function calculateCartTotal() {
+    const cartItems = getCart();
+    const total = cartItems.reduce((sum, item) => {
+        return sum + (item.price * item.quantity);
+    }, 0);
+    return total;
 }

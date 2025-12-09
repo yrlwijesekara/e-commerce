@@ -76,6 +76,75 @@ export function loginUser(req, res) {
         .json({ message: "Error logging in", error: err.message });
     });
 }
+export async function getuser(req, res) {
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Please log in to view user information",
+      error: "User not authenticated",
+    });
+  }
+
+  try {
+    // Fetch full user data from database instead of using token data
+    const user = await User.findOne({ email: req.user.email }).select('-password');
+    
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "User information retrieved successfully",
+      user: user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching user",
+      error: error.message,
+    });
+  }
+}
+
+export async function updateUser(req, res) {
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Please log in to update user information",
+      error: "User not authenticated",
+    });
+  }
+
+  try {
+    console.log("Updating user:", req.user.email);
+    console.log("Update data:", req.body);
+    
+    const { firstname, lastname, phone, address } = req.body;
+    const updatedUser = await User.findOneAndUpdate(
+      { email: req.user.email },
+      { firstname, lastname, phone, address },
+      { new: true }
+    );
+
+    console.log("Updated user:", updatedUser);
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({
+      message: "Error updating user",
+      error: error.message,
+    });
+  }
+}
 
 export function isAdmin(req, res) {
   if (req.user == null) {

@@ -6,6 +6,11 @@ export default function OrderPage() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    
+    // Search and filter states
+    const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState("All");
+    const [dateFilter, setDateFilter] = useState("");
 
     console.log("OrderPage component rendered, loading:", loading, "orders:", orders.length);
 
@@ -71,18 +76,109 @@ export default function OrderPage() {
         });
     }
 
+    // Filter and search logic
+    const filteredOrders = orders.filter(order => {
+        // Search filter (order ID, customer name, email)
+        const searchLower = searchTerm.toLowerCase();
+        const matchesSearch = !searchTerm || 
+            (order.orderID && order.orderID.toLowerCase().includes(searchLower)) ||
+            (order.name && order.name.toLowerCase().includes(searchLower)) ||
+            (order.email && order.email.toLowerCase().includes(searchLower));
+
+        // Status filter
+        const matchesStatus = statusFilter === "All" || order.status === statusFilter;
+
+        // Date filter
+        const matchesDate = !dateFilter || 
+            new Date(order.date).toISOString().split('T')[0] === dateFilter;
+
+        return matchesSearch && matchesStatus && matchesDate;
+    });
+
     return (
         <div className="w-full min-h-full p-8">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold mb-6">Order Management</h1>
+               
+
+                {/* Search and Filter Section */}
+                <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Search Bar */}
+                        <div className="md:col-span-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Search
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Order ID, Customer Name, Email..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+
+                        {/* Status Filter */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Status
+                            </label>
+                            <select
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            >
+                                <option value="All">All Status</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Processing">Processing</option>
+                                <option value="Shipped">Shipped</option>
+                                <option value="Delivered">Delivered</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+
+                        {/* Date Filter */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Order Date
+                            </label>
+                            <input
+                                type="date"
+                                value={dateFilter}
+                                onChange={(e) => setDateFilter(e.target.value)}
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Clear Filters Button */}
+                    {(searchTerm || statusFilter !== "All" || dateFilter) && (
+                        <div className="mt-4">
+                            <button
+                                onClick={() => {
+                                    setSearchTerm("");
+                                    setStatusFilter("All");
+                                    setDateFilter("");
+                                }}
+                                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg font-medium transition-colors"
+                            >
+                                Clear All Filters
+                            </button>
+                            <span className="ml-4 text-sm text-gray-600">
+                                Showing {filteredOrders.length} of {orders.length} orders
+                            </span>
+                        </div>
+                    )}
+                </div>
 
                 {loading ? (
                     <div className="text-center py-10">Loading orders...</div>
-                ) : orders.length === 0 ? (
-                    <div className="text-center py-10 text-gray-500">No orders found</div>
+                ) : filteredOrders.length === 0 ? (
+                    <div className="text-center py-10 text-gray-500">
+                        {orders.length === 0 ? "No orders found" : "No orders match your filters"}
+                    </div>
                 ) : (
                     <div className="space-y-4">
-                        {orders.map(order => (
+                        {filteredOrders.map(order => (
                             <div
                                 key={order._id}
                                 className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"

@@ -1,15 +1,26 @@
 import React from "react";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import { IoSettingsSharp } from "react-icons/io5";
 import { PiUsersFill } from "react-icons/pi";
 import { FaBriefcase } from "react-icons/fa";
 import { IoBagHandleSharp } from "react-icons/io5";
+import { IoLogOut } from "react-icons/io5";
 import ProductsAdmin from "./Admin/productsAdmin";
 import AddProduct from "./Admin/addproduct";
 import Updateproduct from "./Admin/updateproduct";
 import OrderPage from "./Admin/orderPage";
+import toast from "react-hot-toast";
 
 export default function AdminPage() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    if (window.confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem("token");
+      toast.success("Logged out successfully");
+      navigate("/login");
+    }
+  };
   return (
     <div className="w-full h-screen flex">
       <div className="w-[400px] h-full flex flex-col  pt-10 border-r bg-zinc-500">
@@ -47,6 +58,17 @@ export default function AdminPage() {
           <IoBagHandleSharp className="pt-1 text-red-500 " />
           Orders
         </Link>
+        
+        {/* Logout Button */}
+        <div className="mt-auto mb-6">
+          <button
+            onClick={handleLogout}
+            className="mx-6 p-4 bg-red-600 hover:bg-red-700 text-white flex items-center justify-center text-lg font-semibold gap-3 rounded-lg transition-colors shadow-lg"
+          >
+            <IoLogOut className="text-2xl" />
+            Logout
+          </button>
+        </div>
       </div>
       <div className="w-[calc(100%-400px)] h-full flex flex-col justify-start items-center overflow-y-auto">
         <Routes>

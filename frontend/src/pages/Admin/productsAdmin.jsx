@@ -39,115 +39,163 @@ export default function ProductsAdmin() {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full h-full flex flex-col items-center p-8 overflow-y-auto ">
-      {loading ? (
-        <Loader/>
-      ) : (
-        <>
-        
-          <table className="w-full border-collapse border border-slate-400 ">
-            <thead>
-              <tr>
-                <th className="border border-slate-300 px-4 py-2">
-                  Product ID
-                </th>
-                <th className="border border-slate-300 px-4 py-2">Name</th>
-                <th className="border border-slate-300 px-4 py-2">
-                  Labelled Price
-                </th>
-                <th className="border border-slate-300 px-4 py-2">Price</th>
-                
-                <th className="border border-slate-300 px-4 py-2">Stock</th>
-                <th className="border border-slate-300 px-4 py-2">Category</th>
-                <th className="border border-slate-300 px-4 py-2">Image</th>
-                <th className="border border-slate-300 px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-center">
-              {products.map((product, index) => (
-                <tr key={index}>
-                  <td className="border border-slate-300 px-4 py-2">
-                    {product.productId}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    {product.name}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    Rs.{product.labelledprice}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    Rs.{product.price}
-                  </td>
-                  
-                  <td className="border border-slate-300 px-4 py-2">
-                    {product.stock}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    {product.category}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2">
-                    {product.image && product.image.length > 0 ? (
-                      <img
-                        src={product.image[0]}
-                        alt={product.name}
-                        className="w-20 h-20 object-cover"
-                      />
-                    ) : (
-                      "No Image"
-                    )}
-                  </td>
-                  <td className="border border-slate-300 px-4 py-2  ">
-                    <div className="flex items-center justify-center gap-2">
-                    <Link
-                      
-                      className="text-blue-300 hover:text-blue-500"
-                    >
-                        <FaEdit className="inline-block mr-1" onClick={
-              (e) => {
-                e.preventDefault();
-                navigate("/admin/update-product", { state: { product } });
-              }
-                        } />
-                    </Link>
-                
-                 <Link
-                   
-                    className="text-red-300 hover:text-red-500"
-                 >
-                    <FaTrashAlt className="inline-block mr-1" onClick={
-            (e) => {
-              e.preventDefault();
-              const token = localStorage.getItem("token");
-              if (!token) {
-                toast.error("No token found. Please log in.");
-                navigate("/login");
-                return;
-              }
-              axios.delete(import.meta.env.VITE_BACKEND_URL + `/api/products/${product.productId}`, { headers: { Authorization: `Bearer ${token}` } })
-                .then((response) => {
-                  toast.success("Product deleted successfully");
-                  setProducts((prevProducts) => prevProducts.filter((p) => p.productId !== product.productId));
-                })
-                .catch((error) => {
-                  toast.error("Failed to delete product");
-                });
-            }
-                    } />
-                 </Link>
-                 </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          </table>
-        </>
-      )}
-      <Link
-        to="/admin/Add-Product"
-        className="p-4 bg-red-500 text-white rounded-full hover:bg-red-600 mb-5 fixed bottom-5 right-5 shadow-2xl"
-      >
-        <FaPlus />
-      </Link>
+    <div className="w-full min-h-full p-8 bg-gray-50">
+      <div className="w-full mx-auto">
+        {/* Header Section */}
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">Product Management</h1>
+            <p className="text-gray-600 mt-1">Manage your product inventory</p>
+          </div>
+          <Link
+            to="/admin/Add-Product"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg font-semibold"
+          >
+            <FaPlus />
+            Add Product
+          </Link>
+        </div>
+
+        {loading ? (
+          <Loader/>
+        ) : products.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-md p-12 text-center">
+            <p className="text-gray-500 text-lg">No products found</p>
+            <Link
+              to="/admin/Add-Product"
+              className="inline-flex items-center gap-2 mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <FaPlus />
+              Add Your First Product
+            </Link>
+          </div>
+        ) : (
+          <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Image
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Product ID
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Category
+                    </th>
+                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Price
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Stock
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {products.map((product, index) => (
+                    <tr key={index} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4">
+                        {product.image && product.image.length > 0 ? (
+                          <img
+                            src={product.image[0]}
+                            alt={product.name}
+                            className="w-16 h-16 object-cover rounded-lg shadow-sm"
+                          />
+                        ) : (
+                          <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <span className="text-gray-400 text-xs">No Image</span>
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="text-sm font-mono text-gray-600">{product.productId}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="text-sm font-semibold text-gray-900">{product.name}</span>
+                          {product.labelledprice > product.price && (
+                            <span className="text-xs text-gray-500 line-through">Rs. {product.labelledprice}</span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className="inline-flex px-3 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 capitalize">
+                          {product.category.replace(/_/g, ' ')}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex flex-col items-end">
+                          <span className="text-sm font-bold text-green-600">Rs. {product.price}</span>
+                          {product.labelledprice > product.price && (
+                            <span className="text-xs text-red-500 font-medium">
+                              {Math.round(((product.labelledprice - product.price) / product.labelledprice) * 100)}% OFF
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
+                          product.stock > 10 
+                            ? 'bg-green-100 text-green-800' 
+                            : product.stock > 0 
+                            ? 'bg-yellow-100 text-yellow-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-center gap-3">
+                          <button
+                            onClick={() => navigate("/admin/update-product", { state: { product } })}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                            title="Edit Product"
+                          >
+                            <FaEdit size={18} />
+                          </button>
+                          <button
+                            onClick={() => {
+                              const token = localStorage.getItem("token");
+                              if (!token) {
+                                toast.error("No token found. Please log in.");
+                                navigate("/login");
+                                return;
+                              }
+                              if (window.confirm(`Are you sure you want to delete "${product.name}"?`)) {
+                                axios.delete(import.meta.env.VITE_BACKEND_URL + `/api/products/${product.productId}`, { 
+                                  headers: { Authorization: `Bearer ${token}` } 
+                                })
+                                .then((response) => {
+                                  toast.success("Product deleted successfully");
+                                  setProducts((prevProducts) => prevProducts.filter((p) => p.productId !== product.productId));
+                                })
+                                .catch((error) => {
+                                  toast.error("Failed to delete product");
+                                });
+                              }
+                            }}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete Product"
+                          >
+                            <FaTrashAlt size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

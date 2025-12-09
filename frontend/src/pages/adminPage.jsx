@@ -7,10 +7,11 @@ import { IoBagHandleSharp } from "react-icons/io5";
 import ProductsAdmin from "./Admin/productsAdmin";
 import AddProduct from "./Admin/addproduct";
 import Updateproduct from "./Admin/updateproduct";
+import OrderPage from "./Admin/orderPage";
 
 export default function AdminPage() {
   return (
-    <div className="w-full h-screen bg-amber-50 flex">
+    <div className="w-full h-screen flex">
       <div className="w-[400px] h-full flex flex-col  pt-10 border-r bg-zinc-500">
         <span className=" text-blue-800 flex justify-center items-center mb-6 text-3xl font-bold">
           Admin Panel
@@ -47,14 +48,14 @@ export default function AdminPage() {
           Orders
         </Link>
       </div>
-      <div className="w-[calc(100%-400px)] h-full flex flex-col justify-start items-center">
+      <div className="w-[calc(100%-400px)] h-full flex flex-col justify-start items-center overflow-y-auto">
         <Routes>
           <Route path="/" element={<h1>Admin Panel</h1>} />
           <Route path="products" element={<ProductsAdmin />} />
           <Route path="users" element={<h4>User Management</h4>} />
 
           <Route path="settings" element={<h1>Settings</h1>} />
-          <Route path="orders" element={<h3>Order Management</h3>} />
+          <Route path="orders" element={<OrderPage />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="update-product" element={<Updateproduct />} />
 

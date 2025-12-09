@@ -132,3 +132,48 @@ export async function getOrders(req, res) {
     });
   }
 }
+
+export async function updateOrderStatus(req, res) {
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Please log in to update order",
+      error: "User not authenticated",
+    });
+  }
+
+  if (!isAdmin(req)) {
+    return res.status(403).json({
+      message: "You don't have permission to update orders",
+      error: "Forbidden",
+    });
+  }
+
+  try {
+    const { status } = req.body;
+    const orderId = req.params.id;
+
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({
+        message: "Order not found",
+      });
+    }
+
+    console.log("Order status updated:", updatedOrder);
+    res.status(200).json({
+      message: "Order status updated successfully",
+      order: updatedOrder,
+    });
+  } catch (error) {
+    console.error("Error updating order:", error);
+    return res.status(500).json({
+      message: "Error updating order",
+      error: error.message || "Internal Server Error",
+    });
+  }
+}

@@ -30,14 +30,16 @@ useEffect(() => {
         loading ? (
             <Loader />
         ) : (
-            <div className="w-full h-auto p-4 flex flex-wrap gap-4 justify-center items-center">
+            <div className="w-full h-auto flex justify-center items-center mt-18">
+            <div className=" grid grid-cols-4 gap-6">
                 {products.length === 0 ? (
-                    <p className="text-lg text-gray-500">No products found.</p>
+                    <p className="text-lg text-gray-500 col-span-4 text-center">No products found.</p>
                 ) : (
                     products.map(product => (
                         <ProductCard key={product._id} product={product} />
                     ))
                 )}
+            </div>
             </div>
         )
     );

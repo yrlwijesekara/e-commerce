@@ -9,7 +9,7 @@ export default function ImageSlider(props) {
     }
     
     return (
-        <div className="w-[600px] h-full flex flex-col p-10 ">
+        <div className="w-full h-full flex flex-col p-10 ">
             <div className="w-full h-[400px] bg-gray-200 flex justify-center items-center mb-4">
                 <img src={images[activeIndex]} className="w-full h-full object-cover rounded-lg shadow-md" />
             </div>

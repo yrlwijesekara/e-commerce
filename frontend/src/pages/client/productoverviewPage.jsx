@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -7,6 +7,7 @@ import ImageSlider from "../../components/imageslider";
 import { addToCart, getCart } from "../../utils/cart";
 export default function ProductOverviewPage() {
     const params = useParams();
+    const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [status, setStatus] = useState('loading');
 
@@ -66,7 +67,13 @@ export default function ProductOverviewPage() {
                 >
                     Add to cart 
                 </button>
-                <button className="w-full mt-2 bg-green-500 border-2 text-white py-2 rounded hover:bg-white hover:text-green-600 transition-colors duration-300 cursor-pointer">
+                <button 
+                    className="w-full mt-2 bg-green-500 border-2 text-white py-2 rounded hover:bg-white hover:text-green-600 transition-colors duration-300 cursor-pointer"
+                    onClick={() => {
+                        addToCart(product, 1);
+                        navigate('/checkout', { state: { items: getCart() } });
+                    }}
+                >
                     Buy Now
                 </button>
             </div>

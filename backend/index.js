@@ -21,11 +21,10 @@ app.use((req, res, next) => {
   if (value != null) {
     const token = value.replace("Bearer ", "");
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (decoded == null) {
-        return res.status(401).json({ error: "Unauthorized" });
+      if (err || decoded == null) {
+        return res.status(401).json({ error: "Unauthorized", message: "Invalid or expired token" });
       } else {
         req.user = decoded;
-        
         next();
       }
     });

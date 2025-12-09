@@ -15,6 +15,10 @@ export default function OrderPage() {
     // Pagination states
     const [currentPage, setCurrentPage] = useState(1);
     const ordersPerPage = 10;
+    
+    // Notes state
+    const [editingNotes, setEditingNotes] = useState({});
+    const [notesInput, setNotesInput] = useState({});
 
     console.log("OrderPage component rendered, loading:", loading, "orders:", orders.length);
 
@@ -78,6 +82,44 @@ export default function OrderPage() {
             console.error("Error updating order:", error);
             toast.error("Failed to update order status");
         });
+    }
+
+    function updateOrderNotes(orderId, notes) {
+        const token = localStorage.getItem('token');
+        
+        axios.put(
+            import.meta.env.VITE_BACKEND_URL + `/api/orders/${orderId}`,
+            { notes: notes },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
+        .then(response => {
+            toast.success("Notes saved successfully");
+            setEditingNotes(prev => ({ ...prev, [orderId]: false }));
+            fetchOrders();
+        })
+        .catch(error => {
+            console.error("Error updating notes:", error);
+            toast.error("Failed to save notes");
+        });
+    }
+
+    function handleNotesEdit(orderId, currentNotes) {
+        setEditingNotes(prev => ({ ...prev, [orderId]: true }));
+        setNotesInput(prev => ({ ...prev, [orderId]: currentNotes || "" }));
+    }
+
+    function handleNotesSave(orderId) {
+        const notes = notesInput[orderId] || "";
+        updateOrderNotes(orderId, notes);
+    }
+
+    function handleNotesCancel(orderId) {
+        setEditingNotes(prev => ({ ...prev, [orderId]: false }));
+        setNotesInput(prev => ({ ...prev, [orderId]: "" }));
     }
 
     // Filter and search logic
@@ -274,6 +316,53 @@ export default function OrderPage() {
                                                 ))}
                                             </div>
                                         )}
+
+                                        {/* Admin Notes Section */}
+                                        <div className="mt-4 border-t pt-4">
+                                            <div className="flex items-center justify-between mb-2">
+                                                <p className="font-semibold text-gray-700">Admin Notes:</p>
+                                                {!editingNotes[order._id] && (
+                                                    <button
+                                                        onClick={() => handleNotesEdit(order._id, order.notes)}
+                                                        className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                                                    >
+                                                        {order.notes && order.notes !== "No additional notes" ? "Edit Notes" : "Add Notes"}
+                                                    </button>
+                                                )}
+                                            </div>
+                                            
+                                            {editingNotes[order._id] ? (
+                                                <div className="space-y-2">
+                                                    <textarea
+                                                        value={notesInput[order._id] || ""}
+                                                        onChange={(e) => setNotesInput(prev => ({ ...prev, [order._id]: e.target.value }))}
+                                                        rows="3"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                                                        placeholder="Add notes about this order..."
+                                                    />
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            onClick={() => handleNotesSave(order._id)}
+                                                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                                                        >
+                                                            Save Notes
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleNotesCancel(order._id)}
+                                                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                                                    <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                                                        {order.notes && order.notes !== "No additional notes" ? order.notes : "No notes added yet"}
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <div className="border-t pt-4 mt-4 text-sm text-gray-500">

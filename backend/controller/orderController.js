@@ -149,12 +149,17 @@ export async function updateOrderStatus(req, res) {
   }
 
   try {
-    const { status } = req.body;
+    const { status, notes } = req.body;
     const orderId = req.params.id;
+
+    // Build update object dynamically
+    const updateData = {};
+    if (status !== undefined) updateData.status = status;
+    if (notes !== undefined) updateData.notes = notes;
 
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
-      { status },
+      updateData,
       { new: true }
     );
 
@@ -164,9 +169,9 @@ export async function updateOrderStatus(req, res) {
       });
     }
 
-    console.log("Order status updated:", updatedOrder);
+    console.log("Order updated:", updatedOrder);
     res.status(200).json({
-      message: "Order status updated successfully",
+      message: status !== undefined ? "Order status updated successfully" : "Order notes updated successfully",
       order: updatedOrder,
     });
   } catch (error) {

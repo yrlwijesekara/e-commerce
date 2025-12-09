@@ -1,20 +1,28 @@
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { addToCart, getCart, calculateCartTotal } from "../../utils/cart";
 import { removeFromCart } from "../../utils/cart";
 import { FaTrashAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-
-export default function CartPage() {
+export default function CheckoutPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const items = getCart();
+    const items = location.state?.items || getCart();
     setCartItems(items);
     setTotal(calculateCartTotal());
-  }, []);
+
+    if(!items || items.length === 0){
+        toast.error("No items in cart");
+        navigate('/products');
+    }
+  }, [location, navigate]);
+
+
 
   return (
     <div className="w-full h-screen flex flex-col  p-4 items-center">
@@ -40,16 +48,12 @@ export default function CartPage() {
               <div className="w-[200px] flex flex-row justify-center items-center">
                 <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-100 transition cursor-pointer"
                 onClick={() => {
-                  addToCart(item, -1);
-                  setCartItems(getCart());
-                  setTotal(calculateCartTotal());
+                 
                 }}> - </button>
                 <p className="font-semibold p-2">Quantity: {item.quantity}</p>
                 <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-200 transition cursor-pointer"
                 onClick={() => {
-                  addToCart(item, 1);
-                  setCartItems(getCart());
-                  setTotal(calculateCartTotal());
+                  
                 }}> + </button>
               </div>
               <div className="w-[200px] flex flex-col justify-center items-center">
@@ -58,9 +62,7 @@ export default function CartPage() {
               <button 
                 className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:text-red-400 transition cursor-pointer absolute right-[-40px]"
                 onClick={() => {
-                  removeFromCart(item.productId);
-                  setCartItems(getCart());
-                  setTotal(calculateCartTotal());
+                 
                 }}
               >
                 <FaTrashAlt />
@@ -75,11 +77,7 @@ export default function CartPage() {
             <h2 className="text-2xl font-bold">Total:</h2>
             <div className="flex items-center gap-4">
               <p className="text-2xl font-bold text-green-600">Rs. {total.toFixed(2)}</p>
-              <button className="px-6 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-700 transition cursor-pointer"
-                onClick={() => {
-                  navigate('/checkout', { state: { items: cartItems } });
-                }}
-              >
+              <button className="px-6 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-700 transition cursor-pointer">
                 Checkout
               </button>
             </div>

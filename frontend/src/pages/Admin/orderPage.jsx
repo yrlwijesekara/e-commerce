@@ -11,6 +11,10 @@ export default function OrderPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("All");
     const [dateFilter, setDateFilter] = useState("");
+    
+    // Pagination states
+    const [currentPage, setCurrentPage] = useState(1);
+    const ordersPerPage = 10;
 
     console.log("OrderPage component rendered, loading:", loading, "orders:", orders.length);
 
@@ -95,10 +99,26 @@ export default function OrderPage() {
         return matchesSearch && matchesStatus && matchesDate;
     });
 
+    // Pagination logic
+    const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+
+    // Reset to page 1 when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, statusFilter, dateFilter]);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     return (
         <div className="w-full min-h-full p-8">
             <div className="max-w-7xl mx-auto">
-               
+                <h1 className="text-3xl font-bold mb-6">Order Management</h1>
 
                 {/* Search and Filter Section */}
                 <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -177,90 +197,161 @@ export default function OrderPage() {
                         {orders.length === 0 ? "No orders found" : "No orders match your filters"}
                     </div>
                 ) : (
-                    <div className="space-y-4">
-                        {filteredOrders.map(order => (
-                            <div
-                                key={order._id}
-                                className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
-                            >
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                                    <div>
-                                        <p className="text-sm text-gray-600">Order ID</p>
-                                        <p className="font-semibold">{order.orderID}</p>
+                    <>
+                        <div className="space-y-4">
+                            {currentOrders.map(order => (
+                                <div
+                                    key={order._id}
+                                    className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+                                >
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                                        <div>
+                                            <p className="text-sm text-gray-600">Order ID</p>
+                                            <p className="font-semibold">{order.orderID}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-600">Customer</p>
+                                            <p className="font-semibold">{order.name}</p>
+                                            <p className="text-sm text-gray-500">{order.email}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-600">Total Amount</p>
+                                            <p className="font-semibold text-green-600">Rs. {(order.totalAmount || 0).toFixed(2)}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-600">Status</p>
+                                            <select
+                                                value={order.status}
+                                                onChange={(e) => updateOrderStatus(order._id, e.target.value)}
+                                                className={`px-3 py-1 rounded font-semibold ${
+                                                    order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                                                    order.status === 'Processing' ? 'bg-blue-100 text-blue-800' :
+                                                    order.status === 'Shipped' ? 'bg-purple-100 text-purple-800' :
+                                                    order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                                                    'bg-red-100 text-red-800'
+                                                }`}
+                                            >
+                                                <option value="Pending">Pending</option>
+                                                <option value="Processing">Processing</option>
+                                                <option value="Shipped">Shipped</option>
+                                                <option value="Delivered">Delivered</option>
+                                                <option value="Cancelled">Cancelled</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Customer</p>
-                                        <p className="font-semibold">{order.name}</p>
-                                        <p className="text-sm text-gray-500">{order.email}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Total Amount</p>
-                                        <p className="font-semibold text-green-600">Rs. {(order.totalAmount || 0).toFixed(2)}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">Status</p>
-                                        <select
-                                            value={order.status}
-                                            onChange={(e) => updateOrderStatus(order._id, e.target.value)}
-                                            className={`px-3 py-1 rounded font-semibold ${
-                                                order.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                                                order.status === 'Processing' ? 'bg-blue-100 text-blue-800' :
-                                                order.status === 'Shipped' ? 'bg-purple-100 text-purple-800' :
-                                                order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                                                'bg-red-100 text-red-800'
-                                            }`}
+
+                                    <div className="border-t pt-4 mt-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                            <div>
+                                                <p className="text-sm text-gray-600">Phone</p>
+                                                <p className="font-medium">{order.phone}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-gray-600">Delivery Address</p>
+                                                <p className="font-medium">{order.address}</p>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() => setSelectedOrder(selectedOrder === order._id ? null : order._id)}
+                                            className="text-blue-600 hover:text-blue-800 font-semibold"
                                         >
-                                            <option value="Pending">Pending</option>
-                                            <option value="Processing">Processing</option>
-                                            <option value="Shipped">Shipped</option>
-                                            <option value="Delivered">Delivered</option>
-                                            <option value="Cancelled">Cancelled</option>
-                                        </select>
+                                            {selectedOrder === order._id ? 'Hide Items' : 'View Items'}
+                                        </button>
+
+                                        {selectedOrder === order._id && order.items && (
+                                            <div className="mt-4 space-y-2">
+                                                <p className="font-semibold">Order Items:</p>
+                                                {order.items.map((item, index) => (
+                                                    <div key={index} className="flex items-center gap-4 bg-gray-50 p-3 rounded">
+                                                        <img src={item.image || 'https://via.placeholder.com/64'} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                                                        <div className="flex-1">
+                                                            <p className="font-medium">{item.name}</p>
+                                                            <p className="text-sm text-gray-600">Qty: {item.quantity} × Rs. {(item.price || 0).toFixed(2)}</p>
+                                                        </div>
+                                                        <p className="font-semibold">Rs. {((item.price || 0) * (item.quantity || 0)).toFixed(2)}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="border-t pt-4 mt-4 text-sm text-gray-500">
+                                        <p>Order Date: {new Date(order.date).toLocaleDateString()} {new Date(order.date).toLocaleTimeString()}</p>
                                     </div>
                                 </div>
+                            ))}
+                        </div>
 
-                                <div className="border-t pt-4 mt-4">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                        <div>
-                                            <p className="text-sm text-gray-600">Phone</p>
-                                            <p className="font-medium">{order.phone}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm text-gray-600">Delivery Address</p>
-                                            <p className="font-medium">{order.address}</p>
-                                        </div>
-                                    </div>
-
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className="mt-6 flex items-center justify-between bg-white rounded-lg shadow-md p-4">
+                                <div className="text-sm text-gray-600">
+                                    Showing {indexOfFirstOrder + 1} to {Math.min(indexOfLastOrder, filteredOrders.length)} of {filteredOrders.length} orders
+                                </div>
+                                <div className="flex gap-2">
+                                    {/* Previous Button */}
                                     <button
-                                        onClick={() => setSelectedOrder(selectedOrder === order._id ? null : order._id)}
-                                        className="text-blue-600 hover:text-blue-800 font-semibold"
+                                        onClick={() => handlePageChange(currentPage - 1)}
+                                        disabled={currentPage === 1}
+                                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                                            currentPage === 1
+                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                : 'bg-blue-600 text-white hover:bg-blue-700'
+                                        }`}
                                     >
-                                        {selectedOrder === order._id ? 'Hide Items' : 'View Items'}
+                                        Previous
                                     </button>
 
-                                    {selectedOrder === order._id && order.items && (
-                                        <div className="mt-4 space-y-2">
-                                            <p className="font-semibold">Order Items:</p>
-                                            {order.items.map((item, index) => (
-                                                <div key={index} className="flex items-center gap-4 bg-gray-50 p-3 rounded">
-                                                    <img src={item.image || 'https://via.placeholder.com/64'} alt={item.name} className="w-16 h-16 object-cover rounded" />
-                                                    <div className="flex-1">
-                                                        <p className="font-medium">{item.name}</p>
-                                                        <p className="text-sm text-gray-600">Qty: {item.quantity} × Rs. {(item.price || 0).toFixed(2)}</p>
-                                                    </div>
-                                                    <p className="font-semibold">Rs. {((item.price || 0) * (item.quantity || 0)).toFixed(2)}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
+                                    {/* Page Numbers */}
+                                    <div className="flex gap-1">
+                                        {[...Array(totalPages)].map((_, index) => {
+                                            const pageNumber = index + 1;
+                                            // Show first page, last page, current page, and pages around current
+                                            if (
+                                                pageNumber === 1 ||
+                                                pageNumber === totalPages ||
+                                                (pageNumber >= currentPage - 1 && pageNumber <= currentPage + 1)
+                                            ) {
+                                                return (
+                                                    <button
+                                                        key={pageNumber}
+                                                        onClick={() => handlePageChange(pageNumber)}
+                                                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                                                            currentPage === pageNumber
+                                                                ? 'bg-blue-600 text-white'
+                                                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                                        }`}
+                                                    >
+                                                        {pageNumber}
+                                                    </button>
+                                                );
+                                            } else if (
+                                                pageNumber === currentPage - 2 ||
+                                                pageNumber === currentPage + 2
+                                            ) {
+                                                return <span key={pageNumber} className="px-2 py-2 text-gray-500">...</span>;
+                                            }
+                                            return null;
+                                        })}
+                                    </div>
 
-                                <div className="border-t pt-4 mt-4 text-sm text-gray-500">
-                                    <p>Order Date: {new Date(order.date).toLocaleDateString()} {new Date(order.date).toLocaleTimeString()}</p>
+                                    {/* Next Button */}
+                                    <button
+                                        onClick={() => handlePageChange(currentPage + 1)}
+                                        disabled={currentPage === totalPages}
+                                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                                            currentPage === totalPages
+                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                : 'bg-blue-600 text-white hover:bg-blue-700'
+                                        }`}
+                                    >
+                                        Next
+                                    </button>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        )}
+                    </>
                 )}
             </div>
         </div>

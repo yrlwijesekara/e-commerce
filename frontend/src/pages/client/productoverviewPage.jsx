@@ -31,34 +31,43 @@ export default function ProductOverviewPage() {
 
 
     return (
-        <div className="w-full h-screen p-8"> 
+        <div className="w-full min-h-screen p-4 sm:p-6 md:p-8 flex justify-center items-center"> 
             {status === 'loading' && <Loader />} 
-            {status === 'success' && <div className="w-full h-full flex flex-row">
-                <div className="w-[49%] h-full flex justify-center">
+            {status === 'success' && <div className="max-w-7xl w-full flex flex-col lg:flex-row gap-4 sm:gap-6 md:gap-8 mg:row">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center md:hidden">
+                        {product.name}
+                        <span className="block sm:inline text-base sm:text-lg text-gray-600 sm:ml-2 mt-1 sm:mt-0">
+                            {product.altname.join(", ")}
+                        </span>
+                    </h1>
+                <div className="w-full lg:w-1/2 flex justify-center items-center ">
                     <ImageSlider images={product.image} />
                 </div>
-                <div className="w-[49%] h-full flex flex-col items-center pt-8 gap-3 px-8">
-                    <h1 className="text-3xl font-bold">{product.name}
-                        <span className="text-lg text-gray-600">{product.altname.join(", ")}</span>
+                <div className="w-full lg:w-1/2 flex flex-col justify-center gap-3 sm:gap-4 px-2 sm:px-4">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold hidden md:block">
+                        {product.name}
+                        <span className="block sm:inline text-base sm:text-lg text-gray-600 sm:ml-2 mt-1 sm:mt-0">
+                            {product.altname.join(", ")}
+                        </span>
                     </h1>
-                    <p className="text-xl text-gray-600">{product.description}</p>  
-                    <div className="flex flex-row gap-4 mt-4">
+                    <p className="text-base sm:text-lg md:text-xl text-gray-600">{product.description}</p>  
+                    <div className="flex flex-row gap-4">
                           {
                         product.labelledprice > product.price ? (
-                            <p>
+                            <p className="text-sm sm:text-base md:text-lg">
                                 <span className="line-through mr-2 text-black-500">Rs. {product.labelledprice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                                 <span className="text-red-600 font-semibold">Rs. {product.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
                             </p>
                         ) : (
-                            <p>
+                            <p className="text-sm sm:text-base md:text-lg">
                                 <span>Rs. {product.price.toFixed(2)}</span>
                             </p>
                         )
                     }
                     </div>
-                     <div className="mt-2 p-4 w-full">
+                     <div className="w-full mt-2 sm:mt-4">
                 <button 
-                    className="w-full bg-blue-500 border-2 text-white py-2 rounded hover:bg-white hover:text-blue-600 transition-colors duration-300 cursor-pointer"
+                    className="w-full bg-blue-500 border-2 text-white py-2 sm:py-3 text-sm sm:text-base rounded hover:bg-white hover:text-blue-600 transition-colors duration-300 cursor-pointer"
                     onClick={() => {
                         addToCart(product,1);
                         toast.success("Product added to cart");
@@ -68,7 +77,7 @@ export default function ProductOverviewPage() {
                     Add to cart 
                 </button>
                 <button 
-                    className="w-full mt-2 bg-green-500 border-2 text-white py-2 rounded hover:bg-white hover:text-green-600 transition-colors duration-300 cursor-pointer"
+                    className="w-full mt-2 bg-green-500 border-2 text-white py-2 sm:py-3 text-sm sm:text-base rounded hover:bg-white hover:text-green-600 transition-colors duration-300 cursor-pointer"
                     onClick={() => {
                         addToCart(product, 1);
                         navigate('/checkout', { state: { items: getCart() } });

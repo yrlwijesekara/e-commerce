@@ -7,7 +7,7 @@ import CheckoutPage from "./checkoutpage";
 
 export default function ClientPage() {
     return (
-        <div className="w-full h-screen mx-h-screen  ">
+        <div className="w-full h-screen">
             <Header />
             <div className="w-full h-[calc(100%-100px)] ">
                 <Routes>

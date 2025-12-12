@@ -208,12 +208,12 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="w-full min-h-screen flex flex-col p-4 items-center">
+    <div className="w-full min-h-screen flex flex-col p-4 sm:p-6 md:p-8 items-center">
       {/* Delivery Details Form */}
       {cartItems.length > 0 && (
-        <div className="w-[900px] mb-6 p-6 bg-white rounded shadow-md">
-          <h2 className="text-2xl font-bold mb-4">Delivery Details</h2>
-          <div className="flex flex-col gap-4">
+        <div className="w-full max-w-4xl mb-6 p-4 sm:p-6 bg-white rounded shadow-md">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">Delivery Details</h2>
+          <div className="flex flex-col gap-3 sm:gap-4">
             <div>
               <label className="block text-sm font-semibold mb-2">Full Name</label>
               <input
@@ -221,7 +221,7 @@ export default function CheckoutPage() {
                 value={deliveryName}
                 onChange={(e) => setDeliveryName(e.target.value)}
                 placeholder="Enter your full name"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm sm:text-base"
                 required
               />
             </div>
@@ -232,7 +232,7 @@ export default function CheckoutPage() {
                 value={deliveryPhone}
                 onChange={(e) => setDeliveryPhone(e.target.value)}
                 placeholder="Enter your phone number"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm sm:text-base"
                 required
               />
             </div>
@@ -243,14 +243,14 @@ export default function CheckoutPage() {
                 onChange={(e) => setDeliveryAddress(e.target.value)}
                 placeholder="Enter your complete delivery address"
                 rows="3"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm sm:text-base"
                 required
               />
             </div>
           </div>
           <button
             onClick={saveUserDetails}
-            className="mt-4 w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition cursor-pointer font-semibold"
+            className="mt-4 w-full bg-blue-500 text-white py-2 sm:py-3 rounded hover:bg-blue-600 transition cursor-pointer font-semibold text-sm sm:text-base"
           >
             Save Details
           </button>
@@ -259,26 +259,24 @@ export default function CheckoutPage() {
 
       {/* Cart Items */}
       {cartItems.length === 0 ? (
-        <p>Your cart is empty</p>
+        <p className="text-base sm:text-lg text-gray-500 mt-10">Your cart is empty</p>
       ) : (
         cartItems.map((item, index) => {
           return (
             <div
               key={item.productId || index}
-              className="w-[900px] h-[100px] mb-4 rounded  text-black flex flex-row items-center p-4 shadow-md gap-8 relative"
+              className="w-full max-w-4xl mb-4 rounded text-black flex flex-col sm:flex-row items-center p-4 sm:p-6 shadow-md gap-4 sm:gap-6 md:gap-8 relative"
             >
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-[100px] h-full object-cover rounded mr-4 float-left flex "
+                className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover rounded"
               />
-              <div className="w-[300px] flex flex-col justify-center items-center t-bold">
-                <h3 className="font-semibold text-lg">{item.name}</h3>
-                
-                
+              <div className="flex-1 flex flex-col justify-center items-center sm:items-start text-center sm:text-left">
+                <h3 className="font-semibold text-base sm:text-lg md:text-xl">{item.name}</h3>
               </div>
-              <div className="w-[200px] flex flex-row justify-center items-center">
-                <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-100 transition cursor-pointer"
+              <div className="flex flex-row justify-center items-center gap-2">
+                <button className="w-8 h-8 sm:w-10 sm:h-10 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-100 transition cursor-pointer"
                 onClick={() => {
                   const newCart = [...cartItems];
                   if (newCart[index].quantity > 1) {
@@ -287,8 +285,8 @@ export default function CheckoutPage() {
                     setTotal(calculateTotal(newCart));
                   }
                 }}> - </button>
-                <p className="font-semibold p-2">Quantity: {item.quantity}</p>
-                <button className="w-6 h-8 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-200 transition cursor-pointer"
+                <p className="font-semibold text-sm sm:text-base px-2">Qty: {item.quantity}</p>
+                <button className="w-8 h-8 sm:w-10 sm:h-10 border border-gray-400 rounded flex items-center justify-center font-bold text-lg bg-white hover:bg-gray-200 transition cursor-pointer"
                 onClick={() => {
                   const newCart = [...cartItems];
                   newCart[index].quantity += 1;
@@ -296,21 +294,21 @@ export default function CheckoutPage() {
                   setTotal(calculateTotal(newCart));
                 }}> + </button>
               </div>
-              <div className="w-[200px] flex flex-col justify-center items-center">
-                <p className="font-semibold">Price: Rs. {item.price * item.quantity}</p>
+              <div className="flex flex-col justify-center items-center sm:items-end min-w-[120px]">
+                <p className="font-semibold text-base sm:text-lg">Rs. {(item.price * item.quantity).toFixed(2)}</p>
               </div>
             </div>
           );
         })
       )}
       {cartItems.length > 0 && (
-        <div className="w-[900px] mt-6 p-4 border-t-2 border-gray-300">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Total:</h2>
-            <div className="flex items-center gap-4">
-              <p className="text-2xl font-bold text-green-600">Rs. {total.toFixed(2)}</p>
+        <div className="w-full max-w-4xl mt-6 p-4 sm:p-6 border-t-2 border-gray-300">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <h2 className="text-xl sm:text-2xl font-bold">Total:</h2>
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+              <p className="text-xl sm:text-2xl font-bold text-green-600">Rs. {total.toFixed(2)}</p>
               <button 
-                className="px-6 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-700 transition cursor-pointer"
+                className="w-full sm:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-green-500 text-white font-semibold text-sm sm:text-base rounded hover:bg-green-700 transition cursor-pointer"
                 onClick={placeOrder}
               >
                Place Order

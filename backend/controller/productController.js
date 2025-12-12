@@ -145,3 +145,25 @@ export async function getProductInfo(req, res) {
     });
   }
 }
+
+export async function searchProducts(req, res) {
+  const query = req.params.query;
+  try {
+      const products = await Product.find({
+          $or: [
+              { name: { $regex: query, $options: 'i' } },
+              { altname: { $regex: query, $options: 'i' } },
+          ]
+      });
+      res.status(200).json({
+          message: "Search completed successfully",
+          products: products
+      });
+  } catch (error) {
+      console.error("Error searching products:", error);
+      return res.status(500).json({
+          message: "Error searching products",
+          error: "Internal Server Error"
+      });
+  }
+}

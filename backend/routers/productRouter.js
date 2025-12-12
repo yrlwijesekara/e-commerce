@@ -2,13 +2,15 @@ import { createProduct, getProductInfo } from "../controller/productController.j
 import { getProducts } from "../controller/productController.js";
 import { deleteProduct } from "../controller/productController.js";
 import { updateProduct } from "../controller/productController.js";
+import { searchProducts } from "../controller/productController.js";
 import express from "express";
 
 const router = express.Router();
 
 router.post("/", createProduct);
-router.get("/", getProducts);              
+router.get("/", getProducts);
+router.get("/search/:query", searchProducts);
+router.get("/:productId", getProductInfo);
 router.delete("/:productId", deleteProduct);
 router.put("/:productId", updateProduct);
-router.get("/:productId", getProductInfo);
 export default router;

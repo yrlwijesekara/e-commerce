@@ -8,6 +8,10 @@ import RegisterPage from "./pages/registerPage";
 import Test from "./pages/test";
 import ClientPage from "./pages/client/clientpage";
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import ForgotPassword from "./pages/client/forgotPassword";
+
+
+
 
 
 
@@ -21,8 +25,11 @@ function App() {
         <Route path="/admin/*" element={<AdminPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/test" element={<Test />} />
         <Route path="/*" element={<ClientPage />} />
+       
+
       </Routes>
       </GoogleOAuthProvider>
     </BrowserRouter>

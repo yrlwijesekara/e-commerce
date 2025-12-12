@@ -7,6 +7,7 @@ import CheckoutPage from "./checkoutpage";
 import Home from "../home";
 import NotFound from "./404";
 
+
 export default function ClientPage() {
     return (
         <div className="w-full h-screen">
@@ -21,6 +22,7 @@ export default function ClientPage() {
                     <Route path="*" element={<NotFound />} />
                     <Route path="/overview/:id" element={<ProductOverviewPage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
+                    
                 </Routes>
             </div>
         </div>

@@ -21,7 +21,7 @@ export default function Header() {
 
                {/* Logo - Centered on mobile, left on desktop */}
                <Link to="/home" className="absolute left-1/2 -translate-x-1/2 lg:static lg:transform-none flex items-center gap-2 hover:opacity-80 transition-opacity">
-                   <img src="../public/logo.png" alt="Logo" className="w-20 h-20 sm:w-25 sm:h-25 md:w-40 md:h-40 lg:w-60 lg:h-60 xl:pl-20 md:ml-10" />
+                   <img src="/logo.png" alt="Logo" className="w-20 h-20 sm:w-25 sm:h-25 md:w-40 md:h-40 lg:w-60 lg:h-60 xl:pl-20 md:ml-10" />
                </Link>
 
                {/* Desktop Navigation */}

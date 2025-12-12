@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { GoogleLogin } from '@react-oauth/google';
 
+
 export default function LoginPage() {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -24,7 +25,13 @@ export default function LoginPage() {
             }
         } catch (error) {
             console.error("There was an error!", error);
-            toast.error("Login failed!");
+            if (error.response?.status === 401) {
+                toast.error("Invalid email or password!");
+            } else if (error.response?.status === 404) {
+                toast.error("Account not found. Please sign up first!");
+            } else {
+                toast.error("Login failed! Please try again.");
+            }
         }
     }
 
@@ -89,8 +96,15 @@ export default function LoginPage() {
 
         <p className="text-sm">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-red-500 cursor-pointer">
+          <Link to="/register" className="text-red-500 cursor-pointer">
             Sign Up
+          </Link>
+          
+        </p>
+        <p className="text-sm">
+          
+          <Link to="/forgot-password" className="text-red-500 cursor-pointer">
+            Forgot password
           </Link>
         </p>
       </div>

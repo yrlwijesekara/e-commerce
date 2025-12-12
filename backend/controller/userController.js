@@ -1,11 +1,26 @@
 import User from "../models/user.js";
+import OTP from "../models/otp.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { OAuth2Client } from 'google-auth-library';
+import nodemailer from 'nodemailer';
 dotenv.config();
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+
+
+
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  port : 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD
+  }
+});
 
 export function createUser(req, res) {
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
@@ -209,6 +224,130 @@ export async function updateUser(req, res) {
       message: "Error updating user",
       error: error.message,
     });
+  }
+}
+export async function sendResetPasswordOTP(req, res) {
+  const email = req.body.email;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  try {
+    // Check if user exists
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "No account found with this email address" });
+    }
+
+    // Delete any existing OTP for this email
+    await OTP.deleteMany({ email: email });
+
+    // Create new OTP entry
+    const otpEntry = new OTP({
+      email: email,
+      otp: otp,
+      expireAt: new Date(Date.now() + 10 * 60 * 1000) // OTP valid for 10 minutes
+    });
+    await otpEntry.save();
+
+    // Send email with OTP
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: email,
+      subject: 'Password Reset OTP - E-Commerce',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #4F46E5;">Password Reset Request</h2>
+          <p>Hello,</p>
+          <p>We received a request to reset your password. Use the OTP below to reset your password:</p>
+          <div style="background-color: #F3F4F6; padding: 20px; border-radius: 8px; text-align: center; margin: 20px 0;">
+            <h1 style="color: #1F2937; margin: 0; font-size: 36px; letter-spacing: 8px;">${otp}</h1>
+          </div>
+          <p><strong>This OTP will expire in 10 minutes.</strong></p>
+          <p>If you didn't request this password reset, please ignore this email.</p>
+          <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 30px 0;" />
+          <p style="color: #6B7280; font-size: 12px;">This is an automated email, please do not reply.</p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    
+    res.status(200).json({ message: 'OTP sent successfully to your email' });
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    res.status(500).json({ message: 'Error sending OTP', error: error.message });
+  }
+}
+
+export async function verifyOTP(req, res) {
+  const { email, otp } = req.body;
+
+  try {
+    // Find OTP entry
+    const otpEntry = await OTP.findOne({ email });
+
+    if (!otpEntry) {
+      return res.status(404).json({ message: "OTP not found or expired" });
+    }
+
+    // Check if OTP matches
+    if (otpEntry.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    // Check if OTP has expired
+    if (new Date() > otpEntry.expireAt) {
+      await OTP.deleteOne({ email });
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    res.status(200).json({ message: "OTP verified successfully" });
+  } catch (error) {
+    console.error('Error verifying OTP:', error);
+    res.status(500).json({ message: 'Error verifying OTP', error: error.message });
+  }
+}
+
+export async function resetPassword(req, res) {
+  const { email, otp, newPassword } = req.body;
+
+  try {
+    // Verify OTP one more time
+    const otpEntry = await OTP.findOne({ email });
+
+    if (!otpEntry) {
+      return res.status(404).json({ message: "OTP not found or expired" });
+    }
+
+    if (otpEntry.otp !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (new Date() > otpEntry.expireAt) {
+      await OTP.deleteOne({ email });
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    // Hash new password
+    const passwordHash = bcrypt.hashSync(newPassword, 10);
+
+    // Update user password
+    const user = await User.findOneAndUpdate(
+      { email },
+      { password: passwordHash },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Delete OTP entry after successful password reset
+    await OTP.deleteOne({ email });
+
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.status(500).json({ message: 'Error resetting password', error: error.message });
   }
 }
 

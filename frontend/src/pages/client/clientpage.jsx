@@ -14,15 +14,15 @@ export default function ClientPage() {
             <Header />
             <div className="w-full h-[calc(100%-100px)] ">
                 <Routes>
+                    <Route path="/" element={<Home />} />
                     <Route path="/home" element={<Home />} />
                     <Route path="/products" element={<Product />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/about" element={<h1>About Us Page</h1>} />
                     <Route path="/contact" element={<h1>Contact Us Page</h1>} />
-                    <Route path="*" element={<NotFound />} />
                     <Route path="/overview/:id" element={<ProductOverviewPage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
-                    
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
         </div>

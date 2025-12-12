@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function LoginPage() {
     const [password, setPassword] = useState("");
@@ -26,9 +27,29 @@ export default function LoginPage() {
             toast.error("Login failed!");
         }
     }
+
+    async function handleGoogleLogin(credentialResponse) {
+        try {
+            console.log(credentialResponse);
+            const response = await axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users/google-login", { 
+                credential: credentialResponse.credential 
+            });
+            localStorage.setItem("token", response.data.token);
+            toast.success("Google login successful!");
+            
+            if (response.data.role === 'admin') {
+                navigate("/admin/");
+            } else {
+                navigate("/");
+            }
+        } catch (error) {
+            console.error("Google login error!", error);
+            toast.error("Google login failed!");
+        }
+    }
   return (
-    <div className="w-full h-screen bg-[url('./loginbg.jpg')] bg-cover bg-center flex justify-center items-center">
-      <div className="w-[500px] h-[500px] backdrop-blur-sm shadow-2xl rounded-lg flex flex-col  items-center gap-10 text-white pt-4">
+    <div className="w-full h-screen bg-[url('./loginbg.jpg')] bg-cover bg-center flex justify-center items-center py-8">
+      <div className="w-[500px] max-h-[90vh] backdrop-blur-sm shadow-2xl rounded-lg flex flex-col items-center gap-6 text-white py-6 px-4 overflow-y-auto">
         <h1 className="text-2xl font-bold">Login</h1>
         <p className="text-sm">Please enter your credentials</p>
         <input
@@ -50,9 +71,25 @@ export default function LoginPage() {
         <button onClick={login} className="w-[80%] p-3 bg-red-500 rounded-lg font-bold hover:bg-red-600">
           Login
         </button>
+        
+        <div className="w-[80%] flex items-center gap-4">
+          <div className="flex-1 h-[1px] bg-white/30"></div>
+          <span className="text-sm">OR</span>
+          <div className="flex-1 h-[1px] bg-white/30"></div>
+        </div>
+
+        <div className="w-[80%] flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              toast.error('Google login failed!');
+            }}
+          />
+        </div>
+
         <p className="text-sm">
           Don't have an account?{" "}
-          <Link to={"/signup"} className="text-red-500 cursor-pointer">
+          <Link to="/signup" className="text-red-500 cursor-pointer">
             Sign Up
           </Link>
         </p>
@@ -79,3 +116,7 @@ export default function LoginPage() {
   "role": "admin"
 }
   */
+
+/*
+
+*/

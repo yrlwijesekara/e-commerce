@@ -2,7 +2,10 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { OAuth2Client } from 'google-auth-library';
 dotenv.config();
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export function createUser(req, res) {
   const passwordHash = bcrypt.hashSync(req.body.password, 10);
@@ -76,6 +79,69 @@ export function loginUser(req, res) {
         .json({ message: "Error logging in", error: err.message });
     });
 }
+export async function googleLogin(req, res) {
+  try {
+    const { credential } = req.body;
+    
+    console.log('GOOGLE_CLIENT_ID from env:', process.env.GOOGLE_CLIENT_ID);
+    
+    // Verify the Google token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    const email = payload.email;
+    const firstname = payload.given_name || '';
+    const lastname = payload.family_name || '';
+    const image = payload.picture || '';
+    
+    // Check if user exists
+    let user = await User.findOne({ email });
+    
+    if (!user) {
+      // Create new user if doesn't exist
+      user = new User({
+        firstname,
+        lastname,
+        email,
+        password: bcrypt.hashSync(Math.random().toString(36), 10), // Random password
+        image,
+        isEmailVerified: true, // Google emails are verified
+        role: 'customer'
+      });
+      await user.save();
+    }
+    
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        role: user.role,
+        isBlocked: user.isBlocked,
+        isEmailVerified: user.isEmailVerified,
+        image: user.image,
+      },
+      process.env.JWT_SECRET,
+    );
+    
+    res.json({
+      message: "Google login successful",
+      role: user.role,
+      token: token,
+    });
+  } catch (error) {
+    console.error('Google login error:', error);
+    res.status(401).json({
+      message: "Google authentication failed",
+      error: error.message
+    });
+  }
+}
+
 export async function getuser(req, res) {
   if (!req.user) {
     return res.status(401).json({

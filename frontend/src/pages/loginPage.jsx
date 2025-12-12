@@ -57,7 +57,7 @@ export default function LoginPage() {
   return (
     <div className="w-full h-screen bg-[url('./loginbg.jpg')] bg-cover bg-center flex justify-center items-center py-8">
       <div className="w-[500px] max-h-[90vh] backdrop-blur-sm shadow-2xl rounded-lg flex flex-col items-center gap-6 text-white py-6 px-4 overflow-y-auto">
-        <h1 className="text-2xl font-bold">Login</h1>
+        <h1 className="text-2xl font-bold text-center text-amber-300">Login</h1>
         <p className="text-sm">Please enter your credentials</p>
         <input
             onChange={(e) => {
@@ -75,7 +75,7 @@ export default function LoginPage() {
           placeholder="Password"
           className="w-[80%] p-3 rounded-lg text-white outline-none hover:border-2"
         />
-        <button onClick={login} className="w-[80%] p-3 bg-red-500 rounded-lg font-bold hover:bg-red-600">
+        <button onClick={login} className="w-[80%] p-3 bg-amber-500 rounded-lg font-bold hover:bg-secondary hover:text-white transition-colors">
           Login
         </button>
         
@@ -96,14 +96,14 @@ export default function LoginPage() {
 
         <p className="text-sm">
           Don't have an account?{" "}
-          <Link to="/register" className="text-red-500 cursor-pointer">
+          <Link to="/register" className="text-secondary cursor-pointer">
             Sign Up
           </Link>
           
         </p>
         <p className="text-sm">
           
-          <Link to="/forgot-password" className="text-red-500 cursor-pointer">
+          <Link to="/forgot-password" className="text-secondary cursor-pointer">
             Forgot password
           </Link>
         </p>

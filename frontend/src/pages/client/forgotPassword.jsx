@@ -90,30 +90,30 @@ export default function ForgotPassword() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 px-4 py-8">
-            <div className="bg-white/80 backdrop-blur-sm p-6 sm:p-8 md:p-10 rounded-2xl shadow-2xl w-full max-w-md">
+        <div className="w-full h-screen bg-[url('./loginbg.jpg')] bg-cover bg-center flex justify-center items-center py-8">
+            <div className="w-[500px] max-h-[90vh] backdrop-blur-sm shadow-2xl rounded-lg flex flex-col items-center gap-6 text-white py-6 px-4 overflow-y-auto">
                 {/* Back to Login Link */}
                 <Link 
                     to="/login" 
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6 transition-colors"
+                    className="flex items-center gap-2 text-amber-300 hover:text-amber-200 transition-colors self-start"
                 >
                     <HiArrowLeft className="text-xl" />
-                    <span className="text-sm sm:text-base">Back to Login</span>
+                    <span className="text-sm">Back to Login</span>
                 </Link>
 
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mb-4">
+                <div className="text-center">
+                    <div className="mx-auto w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center mb-4">
                         {step === 1 ? <HiMail className="text-3xl text-white" /> : 
                          step === 2 ? <HiKey className="text-3xl text-white" /> :
                          <HiLockClosed className="text-3xl text-white" />}
                     </div>
-                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+                    <h1 className="text-2xl font-bold text-amber-300 mb-2">
                         {step === 1 ? "Forgot Password?" : 
                          step === 2 ? "Verify OTP" : 
                          "Password Reset!"}
-                    </h2>
-                    <p className="text-sm sm:text-base text-gray-600">
+                    </h1>
+                    <p className="text-sm text-white/80">
                         {step === 1 ? "No worries! Enter your email and we'll send you an OTP." :
                          step === 2 ? "Enter the OTP sent to your email and create a new password." :
                          "Your password has been reset successfully!"}
@@ -122,94 +122,80 @@ export default function ForgotPassword() {
 
                 {step === 1 ? (
                     // Step 1: Email Input
-                    <div className="space-y-6">
-                        <div className="relative">
-                            <HiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-                            <input
-                                type="email"
-                                placeholder="Enter your email address"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleSendOTP()}
-                                className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base"
-                                disabled={loading}
-                            />
-                        </div>
+                    <>
+                        <input
+                            type="email"
+                            placeholder="Enter your email address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleSendOTP()}
+                            className="w-[80%] p-3 rounded-lg text-white outline-none hover:border-2"
+                            disabled={loading}
+                        />
 
                         <button
                             onClick={handleSendOTP}
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            className="w-[80%] p-3 bg-amber-500 rounded-lg font-bold hover:bg-amber-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? "Sending..." : "Send OTP"}
                         </button>
 
-                        <div className="text-center">
-                            <p className="text-sm text-gray-600">
-                                Remember your password?{" "}
-                                <Link to="/login" className="text-blue-600 hover:text-blue-700 font-semibold underline">
-                                    Sign in
-                                </Link>
-                            </p>
-                        </div>
-                    </div>
+                        <p className="text-sm">
+                            Remember your password?{" "}
+                            <Link to="/login" className="text-amber-300 hover:text-amber-200 cursor-pointer">
+                                Sign in
+                            </Link>
+                        </p>
+                    </>
                 ) : step === 2 ? (
                     // Step 2: OTP & Password Reset
-                    <div className="space-y-6">
-                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
-                            <p className="text-blue-800 text-xs sm:text-sm">
+                    <>
+                        <div className="w-[80%] bg-amber-500/20 border border-amber-500/50 rounded-lg p-3 text-center">
+                            <p className="text-amber-200 text-sm">
                                 OTP sent to <strong>{email}</strong>
                             </p>
                         </div>
 
-                        <div className="relative">
-                            <HiKey className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-                            <input
-                                type="text"
-                                placeholder="Enter 6-digit OTP"
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                                maxLength={6}
-                                className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base tracking-widest text-center font-semibold"
-                                disabled={loading}
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            placeholder="Enter 6-digit OTP"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                            maxLength={6}
+                            className="w-[80%] p-3 rounded-lg text-white outline-none hover:border-2 tracking-widest text-center font-semibold"
+                            disabled={loading}
+                        />
 
-                        <div className="relative">
-                            <HiLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-                            <input
-                                type="password"
-                                placeholder="New password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base"
-                                disabled={loading}
-                            />
-                        </div>
+                        <input
+                            type="password"
+                            placeholder="New password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            className="w-[80%] p-3 rounded-lg text-white outline-none hover:border-2"
+                            disabled={loading}
+                        />
 
-                        <div className="relative">
-                            <HiLockClosed className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
-                            <input
-                                type="password"
-                                placeholder="Confirm new password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleResetPassword()}
-                                className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors text-sm sm:text-base"
-                                disabled={loading}
-                            />
-                        </div>
+                        <input
+                            type="password"
+                            placeholder="Confirm new password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && handleResetPassword()}
+                            className="w-[80%] p-3 rounded-lg text-white outline-none hover:border-2"
+                            disabled={loading}
+                        />
 
                         <button
                             onClick={handleResetPassword}
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                            className="w-[80%] p-3 bg-amber-500 rounded-lg font-bold hover:bg-amber-600 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? "Resetting..." : "Reset Password"}
                         </button>
 
-                        <div className="text-center space-y-2">
-                            <p className="text-sm text-gray-600">
+                        <div className="text-center">
+                            <p className="text-sm text-white/80 mb-2">
                                 Didn't receive the OTP?
                             </p>
                             <button
@@ -219,28 +205,28 @@ export default function ForgotPassword() {
                                     setNewPassword("");
                                     setConfirmPassword("");
                                 }}
-                                className="text-blue-600 hover:text-blue-700 font-semibold text-sm underline"
+                                className="text-amber-300 hover:text-amber-200 font-semibold text-sm cursor-pointer"
                             >
                                 Resend OTP
                             </button>
                         </div>
-                    </div>
+                    </>
                 ) : (
                     // Step 3: Success State
-                    <div className="space-y-6">
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                            <p className="text-green-800 text-sm sm:text-base">
+                    <>
+                        <div className="w-[80%] bg-green-500/20 border border-green-500/50 rounded-lg p-4 text-center">
+                            <p className="text-green-200 text-sm">
                                 Your password has been reset successfully!
                             </p>
                         </div>
 
                         <Link
                             to="/login"
-                            className="block w-full text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg hover:scale-105 transition-all duration-300"
+                            className="w-[80%] p-3 bg-amber-500 rounded-lg font-bold hover:bg-amber-600 text-center hover:text-white transition-colors"
                         >
                             Go to Login
                         </Link>
-                    </div>
+                    </>
                 )}
             </div>
         </div>

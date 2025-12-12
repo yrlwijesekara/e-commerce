@@ -128,7 +128,7 @@ export default function RegisterPage() {
 
                 <button
                     onClick={register}
-                    className="w-[80%] p-3 bg-green-500 rounded-lg font-bold hover:bg-green-600 transition-colors"
+                    className="w-[80%] p-3 bg-amber-500 rounded-lg font-bold hover:bg-secondary hover:text-white transition-colors"
                 >
                     Register
                 </button>
@@ -150,7 +150,7 @@ export default function RegisterPage() {
 
                 <p className="text-sm">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-green-400 cursor-pointer hover:text-green-300">
+                    <Link to="/login" className="text-secondary cursor-pointer hover:text-green-300">
                         Login
                     </Link>
                 </p>

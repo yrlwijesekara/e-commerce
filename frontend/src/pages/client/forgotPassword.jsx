@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { HiMail, HiArrowLeft, HiKey, HiLockClosed } from "react-icons/hi";
+import loginBg from '/loginbg.jpg';
 
 export default function ForgotPassword() {
     const navigate = useNavigate();
@@ -90,7 +91,7 @@ export default function ForgotPassword() {
     }
 
     return (
-        <div className="w-full h-screen bg-[url('/loginbg.jpg')] bg-cover bg-center flex justify-center items-center py-8">
+        <div className="w-full h-screen bg-cover bg-center flex justify-center items-center py-8" style={{ backgroundImage: `url(${loginBg})` }}>
             <div className="w-[500px] max-h-[90vh] backdrop-blur-sm shadow-2xl rounded-lg flex flex-col items-center gap-6 text-white py-6 px-4 overflow-y-auto">
                 {/* Back to Login Link */}
                 <Link 

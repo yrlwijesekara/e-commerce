@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { GoogleLogin } from '@react-oauth/google';
-
+import { GoogleLogin } from '@react-oauth/google';import loginBg from '/loginbg.jpg';
 export default function RegisterPage() {
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
@@ -78,7 +77,7 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="w-full min-h-screen bg-[url('/loginbg.jpg')] bg-cover bg-center flex justify-center items-center py-8">
+        <div className="w-full min-h-screen bg-cover bg-center flex justify-center items-center py-8" style={{ backgroundImage: `url(${loginBg})` }}>
             <div className="w-[500px] max-h-[90vh] backdrop-blur-sm shadow-2xl rounded-lg flex flex-col items-center gap-4 text-white py-6 px-4 overflow-y-auto">
                 <h1 className="text-2xl font-bold">Create Account</h1>
                 <p className="text-sm">Please fill in your details</p>

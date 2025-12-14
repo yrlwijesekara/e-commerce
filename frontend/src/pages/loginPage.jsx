@@ -55,7 +55,7 @@ export default function LoginPage() {
         }
     }
   return (
-    <div className="w-full h-screen bg-[url('./loginbg.jpg')] bg-cover bg-center flex justify-center items-center py-8">
+    <div className="w-full h-screen bg-[url('/loginbg.jpg')] bg-cover bg-center flex justify-center items-center py-8">
       <div className="w-[500px] max-h-[90vh] backdrop-blur-sm shadow-2xl rounded-lg flex flex-col items-center gap-6 text-white py-6 px-4 overflow-y-auto">
         <h1 className="text-2xl font-bold text-center text-amber-300">Login</h1>
         <p className="text-sm">Please enter your credentials</p>

@@ -52,7 +52,7 @@ export default function Header() {
                        Products
                    </Link>
                    <Link to="/about" className="text-base xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
-                       About
+                       Reviews
                    </Link>
                    <Link to="/contact" className="text-base xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
                        Contact
@@ -111,7 +111,7 @@ export default function Header() {
                            onClick={() => setIsMenuOpen(false)}
                        >
                            <HiInformationCircle className="text-2xl" />
-                           About
+                           Reviews
                        </Link>
                        <Link 
                            to="/contact" 

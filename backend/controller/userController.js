@@ -13,12 +13,10 @@ const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
 const transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  port : 587,
-  secure: false,
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASSWORD
+    user: 'yehanjb@gmail.com',
+    pass: 'morahpqkgzwszcta' // App Password ONLY
   }
 });
 

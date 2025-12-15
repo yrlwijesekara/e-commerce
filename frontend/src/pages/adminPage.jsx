@@ -37,7 +37,7 @@ export default function AdminPage() {
           }
         );
 
-        if (response.data.role === "admin") {
+        if (response.data.user.role === "admin") {
           setAdminValidated(true);
         } else {
           toast.error("Access denied. Admin privileges required.");

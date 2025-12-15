@@ -7,7 +7,9 @@ import { OAuth2Client } from 'google-auth-library';
 import nodemailer from 'nodemailer';
 dotenv.config();
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// Fallback for Google Client ID if environment variable is not set
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '926976194232-60121cu9a94u5gctqodj99po540iq4ie.apps.googleusercontent.com';
+const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 
 

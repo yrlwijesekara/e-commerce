@@ -1,10 +1,29 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiCart } from "react-icons/bi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiMenu, HiX, HiHome, HiShoppingBag, HiInformationCircle, HiMail } from "react-icons/hi";
+import { IoLogOut } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if user is logged in
+        const token = localStorage.getItem("token");
+        setIsLoggedIn(!!token);
+    }, []);
+
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("token");
+            setIsLoggedIn(false);
+            toast.success("Logged out successfully");
+            navigate("/login");
+        }
+    };
 
     return (
        <header className="w-full h-auto sm:h-[100px] md:h-[120px] lg:h-[150px] bg-primary text-secondary shadow-md relative z-50 lg:p-8">
@@ -45,12 +64,24 @@ export default function Header() {
                    <Link to="/cart" className="hover:text-white hover:scale-110 transition-transform duration-200">
                        <BiCart className="text-2xl sm:text-3xl" />
                    </Link>
-                   <Link to="/login" className="text-sm sm:text-base md:text-lg xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
-                       Login
-                   </Link>
-                   <Link to="/register" className="text-sm sm:text-base md:text-lg xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
-                       Register
-                   </Link>
+                   {isLoggedIn ? (
+                       <button
+                           onClick={handleLogout}
+                           className="flex items-center gap-2 text-sm sm:text-base md:text-lg xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200"
+                       >
+                           <IoLogOut className="text-xl sm:text-2xl" />
+                           <span className="hidden sm:inline">Logout</span>
+                       </button>
+                   ) : (
+                       <>
+                           <Link to="/login" className="text-sm sm:text-base md:text-lg xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
+                               Login
+                           </Link>
+                           <Link to="/register" className="text-sm sm:text-base md:text-lg xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
+                               Register
+                           </Link>
+                       </>
+                   )}
                </div>
            </div>
 
@@ -90,6 +121,18 @@ export default function Header() {
                            <HiMail className="text-2xl" />
                            Contact
                        </Link>
+                       {isLoggedIn && (
+                           <button
+                               onClick={() => {
+                                   handleLogout();
+                                   setIsMenuOpen(false);
+                               }}
+                               className="text-lg font-semibold hover:text-white transition-colors py-2 flex items-center gap-3 text-left border-t border-secondary/20 mt-2 pt-4"
+                           >
+                               <IoLogOut className="text-2xl" />
+                               Logout
+                           </button>
+                       )}
                    </div>
                </nav>
            )}

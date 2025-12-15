@@ -11,6 +11,7 @@ import Updateproduct from "./Admin/updateproduct";
 import OrderPage from "./Admin/orderPage";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Reviewmanagement from "./Admin/reviewmanagement";
 
 export default function AdminPage() {
   const navigate = useNavigate();
@@ -97,7 +98,7 @@ export default function AdminPage() {
         >
           
           <PiUsersFill className="pt-1 text-red-500 " />
-          User Management
+          reviews
         </Link>
         <Link
           to="/admin/settings"
@@ -130,7 +131,7 @@ export default function AdminPage() {
         <Routes>
           <Route path="/" element={<h1>Admin Panel</h1>} />
           <Route path="products" element={<ProductsAdmin />} />
-          <Route path="users" element={<h4>User Management</h4>} />
+          <Route path="users" element={<Reviewmanagement  />} />
 
           <Route path="settings" element={<h1>Settings</h1>} />
           <Route path="orders" element={<OrderPage />} />

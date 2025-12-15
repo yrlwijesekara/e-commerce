@@ -10,9 +10,50 @@ import AddProduct from "./Admin/addproduct";
 import Updateproduct from "./Admin/updateproduct";
 import OrderPage from "./Admin/orderPage";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function AdminPage() {
   const navigate = useNavigate();
+  const [adminValidated, setAdminValidated] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const validateAdmin = async () => {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        toast.error("Please login first");
+        navigate("/login");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_BACKEND_URL + "/api/users/user",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.role === "admin") {
+          setAdminValidated(true);
+        } else {
+          toast.error("Access denied. Admin privileges required.");
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Admin validation error:", error);
+        toast.error("Authentication failed");
+        navigate("/login");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    validateAdmin();
+  }, [navigate]);
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to logout?")) {
@@ -21,6 +62,21 @@ export default function AdminPage() {
       navigate("/login");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex items-center justify-center bg-gray-100">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xl font-semibold text-gray-700">Validating admin access...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!adminValidated) {
+    return null;
+  }
   return (
     <div className="w-full h-screen flex">
       <div className="w-[400px] h-full flex flex-col  pt-10 border-r bg-zinc-500">

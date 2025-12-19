@@ -51,7 +51,7 @@ export default function Header() {
                    <Link to="/products" className="text-base xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
                        Products
                    </Link>
-                   <Link to="/about" className="text-base xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
+                   <Link to="/review" className="text-base xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">
                        Reviews
                    </Link>
                    <Link to="/contact" className="text-base xl:text-xl font-semibold hover:text-white hover:scale-110 transition-transform duration-200">

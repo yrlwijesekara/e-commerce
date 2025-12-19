@@ -66,7 +66,7 @@ useEffect(() => {
         loading ? (
             <Loader />
         ) : (
-            <div className="w-full min-h-screen px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-6 md:py-8 lg:py-10">
+            <div className="w-full min-h-screen bg-gradient-to-br from-[color-mix(in_srgb,var(--color-secondary)_30%,white)] px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 py-4 sm:py-6 md:py-8 lg:py-10">
                 {/* Search Bar */}
                 <div className="max-w-7xl mx-auto mb-4 sm:mb-6 md:mb-8">
                     <div className="relative">

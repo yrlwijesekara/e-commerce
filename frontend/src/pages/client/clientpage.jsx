@@ -19,7 +19,7 @@ export default function ClientPage() {
                     <Route path="/home" element={<Home />} />
                     <Route path="/products" element={<Product />} />
                     <Route path="/cart" element={<CartPage />} />
-                    <Route path="/about" element={<ReviewPage />} />
+                    <Route path="/review" element={<ReviewPage />} />
                     <Route path="/contact" element={<h1>Contact Us Page</h1>} />
                     <Route path="/overview/:id" element={<ProductOverviewPage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />

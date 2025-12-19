@@ -101,7 +101,7 @@ export default function ReviewPage() {
     }
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-10 px-4">
+        <div className="w-full min-h-screen bg-gradient-to-br from-[color-mix(in_srgb,var(--color-secondary)_30%,white)] py-10 px-4 flex justify-center items-center">
             <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10">
                 <h1 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-2">
                     Share Your Experience

@@ -167,3 +167,21 @@ export async function searchProducts(req, res) {
       });
   }
 }
+
+export async function getLatestProducts(req, res) {
+    try {
+        const products = await Product.find({ isAvailable: true })
+            .sort({ _id: -1 })
+            .limit(4);
+        res.status(200).json({
+            message: "Latest products retrieved successfully",
+            products: products
+        });
+    } catch (error) {
+        console.error("Error retrieving latest products:", error);
+        return res.status(500).json({
+            message: "Error retrieving latest products",
+            error: "Internal Server Error"
+        });
+    }
+}

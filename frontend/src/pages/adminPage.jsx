@@ -5,6 +5,7 @@ import { PiUsersFill } from "react-icons/pi";
 import { FaBriefcase } from "react-icons/fa";
 import { IoBagHandleSharp } from "react-icons/io5";
 import { IoLogOut } from "react-icons/io5";
+import { FaEnvelope } from "react-icons/fa";
 import ProductsAdmin from "./Admin/productsAdmin";
 import AddProduct from "./Admin/addproduct";
 import Updateproduct from "./Admin/updateproduct";
@@ -12,6 +13,7 @@ import OrderPage from "./Admin/orderPage";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Reviewmanagement from "./Admin/reviewmanagement";
+import ContactManagement from "./Admin/contactManagement";
 
 export default function AdminPage() {
   const navigate = useNavigate();
@@ -101,6 +103,13 @@ export default function AdminPage() {
           reviews
         </Link>
         <Link
+          to="/admin/contacts"
+          className="p-6 hover:text-red-500 flex  text-2xl text-amber-300 gap-10 border-2"
+        >
+          <FaEnvelope className="pt-1 text-red-500 " />
+          Contact Messages
+        </Link>
+        <Link
           to="/admin/settings"
           className="p-6 hover:text-red-500 flex  text-2xl text-amber-300 gap-10 border-2"
         >
@@ -132,7 +141,7 @@ export default function AdminPage() {
           <Route path="/" element={<h1>Admin Panel</h1>} />
           <Route path="products" element={<ProductsAdmin />} />
           <Route path="users" element={<Reviewmanagement  />} />
-
+          <Route path="contacts" element={<ContactManagement />} />
           <Route path="settings" element={<h1>Settings</h1>} />
           <Route path="orders" element={<OrderPage />} />
           <Route path="add-product" element={<AddProduct />} />

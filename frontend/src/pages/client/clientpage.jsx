@@ -7,6 +7,7 @@ import CheckoutPage from "./checkoutpage";
 import Home from "../home";
 import NotFound from "./404";
 import ReviewPage from "./reviewpage";
+import Contact from "./contact";
 
 
 export default function ClientPage() {
@@ -20,7 +21,7 @@ export default function ClientPage() {
                     <Route path="/products" element={<Product />} />
                     <Route path="/cart" element={<CartPage />} />
                     <Route path="/review" element={<ReviewPage />} />
-                    <Route path="/contact" element={<h1>Contact Us Page</h1>} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/overview/:id" element={<ProductOverviewPage />} />
                     <Route path="/checkout" element={<CheckoutPage />} />
                     <Route path="*" element={<NotFound />} />

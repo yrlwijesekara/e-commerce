@@ -228,7 +228,7 @@ export default function Home() {
                       )}
                     </div>
                     <Link
-                      to={`/product-overview/${product.productId}`}
+                      to={`/overview/${product.productId}`}
                       className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white px-4 py-2 rounded-lg hover:shadow-lg transition duration-300"
                     >
                       View Details

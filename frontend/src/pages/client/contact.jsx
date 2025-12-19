@@ -151,7 +151,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-gray-800 text-lg">Address</h3>
-                                        <p className="text-gray-600">123 Beauty Street<br />City, State 12345<br />United States</p>
+                                        <p className="text-gray-600">123 Beauty Street<br />Homagama<br />Sri Lnaka</p>
                                     </div>
                                 </div>
 
@@ -215,22 +215,7 @@ export default function Contact() {
                             </div>
                         </div>
 
-                        {/* Quick Help */}
-                        <div className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] rounded-2xl shadow-2xl p-8 text-white">
-                            <h2 className="text-3xl font-bold mb-4">Need Quick Help?</h2>
-                            <p className="mb-6">Check out our frequently asked questions or reach out to our customer support team.</p>
-                            <div className="space-y-3">
-                                <button className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-6 rounded-lg transition duration-300 text-left">
-                                    📞 Call Customer Support
-                                </button>
-                                <button className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-6 rounded-lg transition duration-300 text-left">
-                                    💬 Live Chat (Coming Soon)
-                                </button>
-                                <button className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 py-3 px-6 rounded-lg transition duration-300 text-left">
-                                    ❓ View FAQs
-                                </button>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

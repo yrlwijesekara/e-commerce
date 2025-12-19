@@ -7,8 +7,8 @@ import { OAuth2Client } from 'google-auth-library';
 import nodemailer from 'nodemailer';
 dotenv.config();
 
-// Fallback for Google Client ID if environment variable is not set
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '926976194232-60121cu9a94u5gctqodj99po540iq4ie.apps.googleusercontent.com';
+// Hardcoded for Render deployment - forgot password function
+const GOOGLE_CLIENT_ID = '926976194232-60121cu9a94u5gctqodj99po540iq4ie.apps.googleusercontent.com';
 const googleClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 
@@ -250,7 +250,7 @@ export async function sendResetPasswordOTP(req, res) {
 
     // Send email with OTP
     const mailOptions = {
-      from: process.env.EMAIL,
+      from: 'yehanjb@gmail.com',
       to: email,
       subject: 'Password Reset OTP - E-Commerce',
       html: `

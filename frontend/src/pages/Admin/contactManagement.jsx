@@ -115,7 +115,7 @@ export default function ContactManagement() {
         return (
             <div className="w-full h-screen flex items-center justify-center">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="w-16 h-16 border-4 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                     <p className="text-xl font-semibold text-gray-700">Loading contact messages...</p>
                 </div>
             </div>
@@ -123,13 +123,13 @@ export default function ContactManagement() {
     }
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-br from-[var(--color-secondary)] to-[color-mix(in_srgb,var(--color-secondary)_50%,white)] p-6">
+        <div className="w-full min-h-screen bg-gray-50 p-6">
             <div className="max-w-7xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-4xl font-bold text-gray-800">Contact Messages</h1>
                     <button
                         onClick={fetchContacts}
-                        className="bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white px-4 py-2 rounded-lg hover:shadow-lg transition duration-300"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300"
                     >
                         Refresh
                     </button>
@@ -148,7 +148,7 @@ export default function ContactManagement() {
                             onClick={() => setFilter(key)}
                             className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition duration-300 ${
                                 filter === key
-                                    ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white shadow-lg'
+                                    ? 'bg-blue-600 text-white shadow-lg'
                                     : 'text-gray-600 hover:bg-gray-100'
                             }`}
                         >
@@ -160,7 +160,7 @@ export default function ContactManagement() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Contact List */}
                     <div className="lg:col-span-1 bg-white rounded-xl shadow-lg overflow-hidden">
-                        <div className="p-4 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white">
+                        <div className="p-4 bg-gray-100 text-gray-800">
                             <h2 className="text-xl font-semibold">Messages ({filteredContacts.length})</h2>
                         </div>
                         <div className="max-h-96 overflow-y-auto">
@@ -207,16 +207,16 @@ export default function ContactManagement() {
                     <div className="lg:col-span-2">
                         {selectedContact ? (
                             <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                                <div className="p-6 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] text-white">
+                                <div className="p-6 bg-gray-100 text-gray-800">
                                     <div className="flex justify-between items-start">
                                         <div>
                                             <h2 className="text-2xl font-semibold">{selectedContact.name}</h2>
-                                            <p className="opacity-90">{selectedContact.email}</p>
+                                            <p className="opacity-75">{selectedContact.email}</p>
                                             <p className="text-sm opacity-75 mt-1">
                                                 {new Date(selectedContact.createdAt).toLocaleString()}
                                             </p>
                                         </div>
-                                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedContact.status)} bg-white`}>
+                                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedContact.status)}`}>
                                             {selectedContact.status}
                                         </span>
                                     </div>
@@ -239,7 +239,7 @@ export default function ContactManagement() {
                                         <button
                                             onClick={() => updateContactStatus(selectedContact._id, 'replied')}
                                             disabled={selectedContact.status === 'replied'}
-                                            className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             <FaReply />
                                             <span>Mark as Replied</span>
@@ -247,7 +247,7 @@ export default function ContactManagement() {
 
                                         <button
                                             onClick={() => updateContactStatus(selectedContact._id, selectedContact.status === 'read' ? 'unread' : 'read')}
-                                            className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                                            className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-300"
                                         >
                                             <FaEye />
                                             <span>{selectedContact.status === 'read' ? 'Mark Unread' : 'Mark Read'}</span>
@@ -255,7 +255,7 @@ export default function ContactManagement() {
 
                                         <button
                                             onClick={() => deleteContact(selectedContact._id)}
-                                            className="flex items-center space-x-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300"
+                                            className="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-300"
                                         >
                                             <FaTrash />
                                             <span>Delete</span>
@@ -263,7 +263,7 @@ export default function ContactManagement() {
 
                                         <button
                                             onClick={() => window.open(`mailto:${selectedContact.email}?subject=Re: ${selectedContact.subject || 'Your message'}`)}
-                                            className="flex items-center space-x-2 bg-[var(--color-accent)] text-white px-4 py-2 rounded-lg hover:shadow-lg transition duration-300"
+                                            className="flex items-center space-x-2 bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition duration-300"
                                         >
                                             <FaEnvelope />
                                             <span>Reply via Email</span>

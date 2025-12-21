@@ -106,7 +106,7 @@ export default function Header() {
                            Products
                        </Link>
                        <Link 
-                           to="/about" 
+                           to="/review" 
                            className="text-lg font-semibold hover:text-white transition-colors py-2 flex items-center gap-3"
                            onClick={() => setIsMenuOpen(false)}
                        >

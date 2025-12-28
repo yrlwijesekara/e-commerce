@@ -161,7 +161,7 @@ export default function Contact() {
                                     </div>
                                     <div>
                                         <h3 className="font-semibold text-gray-800 text-lg">Phone</h3>
-                                        <p className="text-gray-600">(555) 123-4567</p>
+                                        <p className="text-gray-600">+94 123-4567</p>
                                         <p className="text-gray-600">Mon - Fri: 9AM - 8PM</p>
                                     </div>
                                 </div>

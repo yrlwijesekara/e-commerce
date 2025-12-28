@@ -88,11 +88,11 @@ export default function Footer() {
                         <div className="space-y-3">
                             <div className="flex items-center space-x-3">
                                 <FaMapMarkerAlt className="text-lg" />
-                                <span className="text-gray-100">123 Beauty Street, City, State 12345</span>
+                                <span className="text-gray-100">123 Beauty Street,Homagama,Sri Lnaka</span>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <FaPhone className="text-lg" />
-                                <span className="text-gray-100">(555) 123-4567</span>
+                                <span className="text-gray-100">+94 123-4567</span>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <FaEnvelope className="text-lg" />

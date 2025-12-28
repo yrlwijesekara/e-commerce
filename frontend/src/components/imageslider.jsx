@@ -9,16 +9,16 @@ export default function ImageSlider(props) {
     }
     
     return (
-        <div className="w-full h-full flex flex-col p-4 ">
-            <div className="w-full h-[600px] bg-gray-200 flex justify-center items-center mb-4">
-                <img src={images[activeIndex]} className="w-full h-full object-cover rounded-lg shadow-md" />
+        <div className="w-full h-full flex flex-col p-4">
+            <div className="w-full h-[700px] bg-gray-200 flex justify-center items-center mb-4 rounded-lg overflow-hidden">
+                <img src={images[activeIndex]} className="w-full h-full object-cover object-center" />
             </div>
-            <div className="w-full h-[100px] flex gap-2 overflow-x-auto justify-center">
+            <div className="w-full h-[120px] flex gap-3 overflow-x-auto justify-center">
                 {images.map((image, index) => (
                     <img
                         key={index}
                         src={image}
-                        className={`w-20 h-20 object-cover rounded cursor-pointer ${index === activeIndex ? 'border-2 border-blue-500' : 'border border-gray-300'} hover:opacity-50 transform transition-transform duration-200`}
+                        className={`w-24 h-24 object-cover object-center rounded-lg cursor-pointer ${index === activeIndex ? 'border-2 border-blue-500 shadow-lg' : 'border border-gray-300'} hover:opacity-75 hover:scale-105 transform transition-all duration-300`}
                         onClick={() => setActiveIndex(index)}
                     />
                 ))}

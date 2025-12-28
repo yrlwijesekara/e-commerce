@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import loginBg from '/loginbg.jpg';
+
 import Footer from '../components/footer';
+
+// Define loginBg - you can replace this with your actual background image path
+const loginBg = '/loginbg.jpg'; // or import loginBg from '../assets/loginBg.jpg';
 
 
 export default function Home() {
@@ -15,10 +18,10 @@ export default function Home() {
 
   // Carousel images (you can replace these with actual product images or promotional banners)
   const carouselImages = [
-    '/loginbg.jpg',
-    '/loginbg.jpg',
-    '/loginbg.jpg',
-    '/loginbg.jpg'
+    '/home5.jpg',
+    '/home2.jpg',
+    '/home3.jpg',
+    '/home4.jpg'
   ];
 
   const carouselTexts = [
@@ -111,30 +114,30 @@ export default function Home() {
   return (
     <div className="w-full min-h-screen bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)]">
       {/* Hero Carousel Section */}
-      <section className="relative h-screen flex items-center justify-center">
-        <div className="absolute inset-0bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-opacity-50"></div>
+      <section className="relative h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${loginBg})` }}>
+        <div className="absolute inset-0bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-accent)] bg-opacity-50  "></div>
         
         {/* Carousel Container */}
         <div className="relative w-full h-full flex items-center justify-center">
-          <div className="relative w-full max-w-6xl mx-auto">
+          <div className="relative w-full max-w-7xl mx-auto px-4">
             {/* Carousel Image */}
-            <div className="relative h-96 rounded-xl overflow-hidden shadow-2xl">
+            <div className="relative h-[600px] rounded-xl overflow-hidden shadow-2xl group cursor-pointer">
               <img
                 src={carouselImages[currentSlide]}
                 alt={`Slide ${currentSlide + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center transition-all duration-500 group-hover:scale-110 group-hover:brightness-110"
               />
-              <div className="absolute inset-0  to-[color-mix(in_srgb,var(--color-accent)_70%,transparent)]"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-black/30 to-black/20 group-hover:from-black/20 group-hover:to-black/10 transition-all duration-500"></div>
               
               {/* Carousel Text */}
-              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-8">
-                <h1 className="text-6xl font-bold mb-4 animate-fade-in">
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white p-8 group-hover:scale-105 transition-all duration-500">
+                <h1 className="text-6xl font-bold mb-4 animate-fade-in group-hover:text-shadow-lg transition-all duration-300">
                   {carouselTexts[currentSlide].title}
                 </h1>
-                <p className="text-xl mb-8 max-w-2xl">
+                <p className="text-xl mb-8 max-w-2xl group-hover:text-shadow transition-all duration-300">
                   {carouselTexts[currentSlide].subtitle}
                 </p>
-                <Link to="/products" className="bg-white text-[var(--color-primary)] px-8 py-3 rounded-full font-semibold text-lg hover:bg-opacity-90 transition duration-300">
+                <Link to="/products" className="bg-white text-[var(--color-primary)] px-8 py-3 rounded-full font-semibold text-lg hover:bg-opacity-90 hover:scale-105 hover:shadow-xl transition-all duration-300">
                   Shop Now
                 </Link>
               </div>
@@ -143,13 +146,13 @@ export default function Home() {
             {/* Navigation Arrows */}
             <button
               onClick={prevSlide}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition duration-300"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 hover:bg-opacity-30 text-white p-3 rounded-full transition duration-300"
             >
               ‹
             </button>
             <button
               onClick={nextSlide}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition duration-300"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 hover:bg-opacity-30 text-white p-3 rounded-full transition duration-300"
             >
               ›
             </button>
